@@ -75,7 +75,7 @@
 **** 根据文件类型打开各种mode
 ***** (C-h m)
 ***** ex: (Org company)
-*****    Major   Minor
+***** -> Major   Minor
 *** 
 ** TODO -> DONE 
 *** TODO
