@@ -1,0 +1,10 @@
+* 
+** Fixes some annoying stuff
+*** 修正上一期内容
+**** 改变光标要加default才可以默认
+****** (setq cursor-type 'bar) =>
+****** (setq-default cursor-type 'bar)
+***** setq setq-default不同buffers都有自己的值
+
+
+
