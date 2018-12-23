@@ -3,4 +3,10 @@
 首先感谢子龙山人的教学，链接在这里<br>
 http://v.youku.com/v_show/id_XMTUwNjU0MjE0OA==.html<br>
 https://github.com/emacs-china/Spacemacs-rocks<br>
-以下就是我的学习笔记。
+以下就是我的学习笔记。<br>
+*
+**	大标题
+***	小标题
+****	要点
+*****	详细解释
+******	代码
