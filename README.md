@@ -4,9 +4,9 @@
 http://v.youku.com/v_show/id_XMTUwNjU0MjE0OA==.html<br>
 https://github.com/emacs-china/Spacemacs-rocks<br>
 以下就是我的学习笔记。<br>
-*
-**	大标题
-***	小标题
-****	要点
-*****	详细解释
-******	代码
+*<br>
+**	大标题<br>
+***	小标题<br>
+****	要点<br>
+*****	详细解释<br>
+******	代码<br>
