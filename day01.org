@@ -1,10 +1,20 @@
 * 
 ** C-h t 看tutorial
 ** 熟悉基础键位
-***** C-f/C-b/C-n/C-p/C-a/C-e && W-f/W-b/W-e/W-a...
-***** C-g ---- stop
-***** C-h ---- 
-***** 
+#+BEGIN_SRC emacs-lisp
+C-f
+C-b
+C-n
+C-p
+C-a
+C-e
+W-f
+W-b
+W-e
+W-a
+C-g
+C-h ?
+#+END_SRC
 ** 基础功能
 *** 显示行号
 #+BEGIN_SRC emacs-lisp
@@ -132,7 +142,7 @@ C-h m
 *** 
 ** TODO -> DONE 
 *** TODO
-***** (C-cC-t) to tooggle TODO states
+***** (C-c C-t) to tooggle TODO states
 *** 改变光标
 #+BEGIN_SRC emacs-lisp
 (setq cursor-type 'bar)
