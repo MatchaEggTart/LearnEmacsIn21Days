@@ -25,61 +25,61 @@
 ***** web: learnxinyminutes.com
 *** Buffers -> *scratch*
 **** Run
-***** C-x C-e
+***** C-xC-e
 ****** (+ 2 2)
 ****** (+ 2 (* 3 4))
-***** 定义变量
-******* (setq my-name "donald")
-******* (message my-name)
-***** 定义函数
-******* (defun my-func ()
-*******   (interactive)		;;定义函数为交互式函数
-*******   (message "hello, %s" my-name))
-***** 绑定函数按键，按F6就会触发
-******* (global-set-key (kbd "<f6>") 'my-func)
-***** 移动到message setq defun按C-h f可以看到变量名
-***** 关闭缩进
+**** 定义变量
+****** (setq my-name "donald")
+****** (message my-name)
+**** 定义函数
+****** (defun my-func ()
+******   (interactive)		;;定义函数为交互式函数
+******   (message "hello, %s" my-name))
+**** 绑定函数按键，按F6就会触发
+****** (global-set-key (kbd "<f6>") 'my-func)
+**** 移动到message setq defun按C-h f可以看到变量名
+**** 关闭缩进
 ****** M-x electric-indent-mode
-***** 
-**** 保存配置
-***** 先在~/.emacs.d/创建一个init.el
-******* C-xC-f ~/.emacs.d/init.el
-***** t代表true，nil代表关闭
-******* ex: (setq inhibit-splash-screen t)
-***** 关闭工具栏
-******* (tool-bar-mode -1)
-***** major mode
-****** 编辑文件时的形式，提供什么语法规则(缩进、语法高亮……)
-***** 关闭滚动条
-******* (scroll-bar-mode -1)
-***** 关闭electric-indent-mode
-******* (electric-indent-mode -1)
-***** 显示行号
-******* (linum-mode t)
-***** 关闭启动画面
-******* (setq inhibit-splash-screen t)
-***** 定义函数，打开init-file
-****** 先用C-h k 查看C-xC-f的命令名（command find-file）
-******* (defun open-my-init-file()
-*******   (interactive)
-*******   (find-file "~/.emacs.d/init.el"))
-******* (global-set-key (kbd "<f5>") 'open-my-init-file)
-***** 最近文件 (recentf-mode)
-****** 挂了
 **** 
-*** Package
-**** Options -> Manage Emacs Packages
-***** 找到Company 安装……
-****** (global-company-mode t)
-**** Major mode Minor mode
-***** 根据文件类型打开各种mode
-****** (C-h m)
-****** ex: (Org company)
-******    Major   Minor
-**** 
-*** TODO -> DONE 
-**** TODO
-****** (C-cC-t) to tooggle TODO states
-**** 改变光标
-****** (setq cursor-type 'bar)
-**** 
+** 保存配置
+**** 先在~/.emacs.d/创建一个init.el
+****** C-xC-f ~/.emacs.d/init.el
+**** t代表true，nil代表关闭
+****** ex: (setq inhibit-splash-screen t)
+**** 关闭工具栏
+****** (tool-bar-mode -1)
+**** major mode
+***** 编辑文件时的形式，提供什么语法规则(缩进、语法高亮……)
+**** 关闭滚动条
+****** (scroll-bar-mode -1)
+**** 关闭electric-indent-mode
+****** (electric-indent-mode -1)
+**** 显示行号
+****** (linum-mode t)
+**** 关闭启动画面
+****** (setq inhibit-splash-screen t)
+**** 定义函数，打开init-file
+***** 先用C-h k 查看C-xC-f的命令名（command find-file）
+****** (defun open-my-init-file()
+******   (interactive)
+******   (find-file "~/.emacs.d/init.el"))
+****** (global-set-key (kbd "<f5>") 'open-my-init-file)
+**** 最近文件 (recentf-mode)
+***** 挂了
+*** 
+** Package
+*** Options -> Manage Emacs Packages
+**** 找到Company 安装……
+***** (global-company-mode t)
+*** Major mode Minor mode
+**** 根据文件类型打开各种mode
+***** (C-h m)
+***** ex: (Org company)
+*****    Major   Minor
+*** 
+** TODO -> DONE 
+*** TODO
+***** (C-cC-t) to tooggle TODO states
+*** 改变光标
+***** (setq cursor-type 'bar)
+*** 
