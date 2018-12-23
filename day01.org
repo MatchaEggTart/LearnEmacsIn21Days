@@ -26,8 +26,8 @@
 **** Buffers -> *scratch*
 ***** Run
 ****** C-x C-e
-******* (+ 2 2)
-******* (+ 2 (* 3 4))
+- (+ 2 2)
+- (+ 2 (* 3 4))
 ***** 定义变量
 ******* (setq my-name "donald")
 ******* (message my-name)
