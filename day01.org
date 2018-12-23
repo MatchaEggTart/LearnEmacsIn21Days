@@ -7,79 +7,134 @@
 ***** 
 ** 基础功能
 *** 显示行号
-****** M-x linum-mode(display line numbers)
+#+BEGIN_SRC emacs-lisp
+M-x linum-mode(display line numbers)
+#+END_SRC
 *** 查询按键
 **** C-h k
-****** ex: C-h k C-x C-s
+***** ex: 
+#+BEGIN_SRC emacs-lisp
+C-h k
+C-x
+C-s
+#+END_SRC
 ***** 'q' to exit
 *** 查询变量
-****** C-h v
+#+BEGIN_SRC emacs-lisp
+C-h v
+#+END_SRC
 *** 查询函数
-****** C-h f
+#+BEGIN_SRC emacs-lisp
+C-h f
+#+END_SRC
 *** 查询运行mode
-***** C-h m
-****** ex: C-h f save-buffer
+#+BEGIN_SRC emacs-lisp
+C-h m
+#+END_SRC
+***** ex:
+#+BEGIN_SRC emacs-lisp
+C-h f save-buffer
+#+END_SRC
 *** 
 ** elisp 
 *** 学习网站
 ***** web: learnxinyminutes.com
 *** Buffers -> *scratch*
 **** Run
-***** C-xC-e
-****** (+ 2 2)
-****** (+ 2 (* 3 4))
+#+BEGIN_SRC emacs-lisp
+C-xC-e
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+(+ 2 2)
+(+ 2 (* 3 4))
+#+END_SRC
 **** 定义变量
-****** (setq my-name "donald")
-****** (message my-name)
+#+BEGIN_SRC emacs-lisp
+(setq my-name "donald")
+(message my-name)
+#+END_SRC
 **** 定义函数
-****** (defun my-func ()
-******   (interactive)		;;定义函数为交互式函数
-******   (message "hello, %s" my-name))
+#+BEGIN_SRC emacs-lisp
+(defun my-func ()
+  (interactive)		;;定义函数为交互式函数
+  (message "hello, %s" my-name))
+#+END_SRC
 **** 绑定函数按键，按F6就会触发
-****** (global-set-key (kbd "<f6>") 'my-func)
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "<f6>") 'my-func)
+#+END_SRC
 **** 移动到message setq defun按C-h f可以看到变量名
 **** 关闭缩进
-****** M-x electric-indent-mode
+#+BEGIN_SRC emacs-lisp
+M-x electric-indent-mode
+#+END_SRC
 **** 
 ** 保存配置
 **** 先在~/.emacs.d/创建一个init.el
-****** C-xC-f ~/.emacs.d/init.el
+#+BEGIN_SRC emacs-lisp
+C-xC-f ~/.emacs.d/init.el
+#+END_SRC
 **** t代表true，nil代表关闭
-****** ex: (setq inhibit-splash-screen t)
+****** ex:
+#+BEGIN_SRC emacs-lisp
+(setq inhibit-splash-screen t)
+#+END_SRC
+
+
 **** 关闭工具栏
-****** (tool-bar-mode -1)
+#+BEGIN_SRC emacs-lisp
+(tool-bar-mode -1)
+#+END_SRC
 **** major mode
 ***** 编辑文件时的形式，提供什么语法规则(缩进、语法高亮……)
 **** 关闭滚动条
-****** (scroll-bar-mode -1)
+#+BEGIN_SRC emacs-lisp
+(scroll-bar-mode -1)
+#+END_SRC
 **** 关闭electric-indent-mode
-****** (electric-indent-mode -1)
+#+BEGIN_SRC emacs-lisp
+(electric-indent-mode -1)
+#+END_SRC
 **** 显示行号
-****** (linum-mode t)
+#+BEGIN_SRC emacs-lisp
+(linum-mode t)
+#+END_SRC
 **** 关闭启动画面
-****** (setq inhibit-splash-screen t)
+#+BEGIN_SRC emacs-lisp
+(setq inhibit-splash-screen t)
+#+END_SRC
 **** 定义函数，打开init-file
 ***** 先用C-h k 查看C-xC-f的命令名（command find-file）
-****** (defun open-my-init-file()
-******   (interactive)
-******   (find-file "~/.emacs.d/init.el"))
-****** (global-set-key (kbd "<f5>") 'open-my-init-file)
+#+BEGIN_SRC emacs-lisp
+(defun open-my-init-file()
+  (interactive)
+  (find-file "~/.emacs.d/init.el"))
+  (global-set-key (kbd "<f5>") 'open-my-init-file)
+#+END_SRC
 **** 最近文件 (recentf-mode)
 ***** 挂了
 *** 
 ** Package
 *** Options -> Manage Emacs Packages
 **** 找到Company 安装……
-***** (global-company-mode t)
+#+BEGIN_SRC emacs-lisp
+(global-company-mode t)
+#+END_SRC
 *** Major mode Minor mode
 **** 根据文件类型打开各种mode
-***** (C-h m)
-***** ex: (Org company)
-***** -> Major   Minor
+#+BEGIN_SRC emacs-lisp
+C-h m
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+    (Org company)
+-> Major   Minor
+#+END_SRC
 *** 
 ** TODO -> DONE 
 *** TODO
 ***** (C-cC-t) to tooggle TODO states
 *** 改变光标
-***** (setq cursor-type 'bar)
+#+BEGIN_SRC emacs-lisp
+(setq cursor-type 'bar)
+#+END_SRC
 *** 
