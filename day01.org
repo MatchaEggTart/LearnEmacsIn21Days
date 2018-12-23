@@ -42,7 +42,7 @@ C-h f save-buffer
 *** Buffers -> *scratch*
 **** Run
 #+BEGIN_SRC emacs-lisp
-C-xC-e
+C-x C-e
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
 (+ 2 2)
@@ -72,7 +72,7 @@ M-x electric-indent-mode
 ** 保存配置
 **** 先在~/.emacs.d/创建一个init.el
 #+BEGIN_SRC emacs-lisp
-C-xC-f ~/.emacs.d/init.el
+C-x C-f ~/.emacs.d/init.el
 #+END_SRC
 **** t代表true，nil代表关闭
 ****** ex:
