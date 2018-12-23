@@ -1,17 +1,17 @@
-** 
-*** C-h t 看tutorial
-*** 熟悉基础键位
-****** C-f/C-b/C-n/C-p/C-a/C-e && W-f/W-b/W-e/W-a...
-****** C-g ---- stop
-****** C-h ---- 
-**** 
-*** 基础功能
-**** 显示行号
-****** M-x linum-mode(display line numbers)
-**** 查询按键
-****** C-h k
-******* ex: C-h k C-x C-s
-******* 'q' to exit
+* 
+** C-h t 看tutorial
+** 熟悉基础键位
+***** C-f/C-b/C-n/C-p/C-a/C-e && W-f/W-b/W-e/W-a...
+***** C-g ---- stop
+***** C-h ---- 
+***** 
+** 基础功能
+*** 显示行号
+***** M-x linum-mode(display line numbers)
+*** 查询按键
+***** C-h k
+****** ex: C-h k C-x C-s
+****** 'q' to exit
 **** 查询变量
 ****** C-h v
 **** 查询函数
@@ -26,8 +26,8 @@
 **** Buffers -> *scratch*
 ***** Run
 ****** C-x C-e
-- (+ 2 2)
-- (+ 2 (* 3 4))
+******* (+ 2 2)
+******* (+ 2 (* 3 4))
 ***** 定义变量
 ******* (setq my-name "donald")
 ******* (message my-name)
