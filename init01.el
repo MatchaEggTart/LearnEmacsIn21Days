@@ -7,7 +7,7 @@
 
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
-(electric-indent-mode -1)
+;; (electric-indent-mode -1)
 
 (global-linum-mode t)
 
