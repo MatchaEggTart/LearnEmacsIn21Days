@@ -1,30 +1,30 @@
 * 
 ** Fixes some annoying stuff
 - 修正上一期内容
-1.改变光标要加default才可以默认
+*** 1.改变光标要加default才可以默认
 #+BEGIN_SRC emacs-lisp
 (setq cursor-type 'bar) =>
 (setq-default cursor-type 'bar)
 #+END_SRC
 setq 与 setq-default 不同buffers都有自己的值
 
-*** 关闭备份文件
+*** 2.关闭备份文件
 #+BEGIN_SRC emacs-lisp
 (setq make-backup-files nil)
 #+END_SRC
-**** 语法高亮
-***** 全选后按C-c '
+***** 语法高亮
+****** 全选后按C-c '
 #+BEGIN_SRC emacs-lisp
 C-c '
 #+END_SRC
-**** org语法高亮
+***** org语法高亮
 #+BEGIN_SRC emacs-lisp
 (require 'org)
 (setq org-src-fontify-natively t)
 #+END_SRC
 
-*** recentf-mode
-**** 配置
+*** 3.recentf-mode
+***** 配置
 #+BEGIN_SRC emacs-lisp
 (require 'recentf)
 (recentf-mode 1)
@@ -32,21 +32,162 @@ C-c '
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
 #+END_SRC
 
-**** require
+***** require
 #+BEGIN_SRC emacs-lisp
 C-h f	;;光标到require那里看他的功能
 #+END_SRC
-***** 有一个文件(recentf)在emacs里面，require加载这个文件，(require '<symbol name>)，先查看'features'是否有<symbol name>，如果没有，就猜，或者由第二个参数指定文件名，然后'load'文件。
+****** 有一个文件(recentf)在emacs里面，require加载这个文件，(require '<symbol name>)，先查看'features'是否有<symbol name>，如果没有，就猜，或者由第二个参数指定文件名，然后'load'文件。
 
-**** feature
-***** 储存插件的列表
+***** feature
+****** 储存插件的列表
 
-**** load
-***** load可以直接读取硬盘上的文件。
+***** load
+****** load可以直接读取硬盘上的文件。
 
-**** C-x C-e多语句不方便，在行尾对之前语句执行按
+***** C-x C-e多语句不方便，在行尾对之前语句执行按
+ #+BEGIN_SRC emacs-lisp
+ M-x eval-buffer
+ #+END_SRC
+
+*** 4.取消关闭electric-indent-mode
 #+BEGIN_SRC emacs-lisp
-M-x eval-buffer
+;; (electric-indent-mode -1)
+#+END_SRC
+*** 5.开启选中删除功能
+#+BEGIN_SRC emacs-lisp
+(delete-selection-mode t)
 #+END_SRC
 
-*** 
+
+** Make Emacs more fancy
+*** 1.开启全屏
+#+BEGIN_SRC emacs-lisp
+(setq initial-frame-alist (quote ((fullscreen . maximized))))
+#+END_SRC
+*** 2.开启光标检查括号
+#+BEGIN_SRC emacs-lisp
+(add-hook 'emacs-lisp-mode-hook 'show-paren-mode)
+#+END_SRC
+*** 3.显示当前行高亮
+#+BEGIN_SRC emacs-lisp
+(global-hl-line-mode t)
+#+END_SRC
+
+** Improve built-in package system
+
+*** 1.Melpa
+#+BEGIN_SRC emacs-lisp
+(when (>= emacs-major-version 24)
+  (require 'package)
+  (package-initialize)
+  (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                           ("melpa" . "https://melpa.org/packages/"))))
+
+;; cl - Common Lisp Extension
+(require 'cl)
+
+;; Add Packages
+(defvar donald/packages '(
+			  ;; --- Auto-completion ---
+			  dracula-theme
+			  spacemacs-theme
+			  solarized-theme
+			  company
+			  ) "Default packages")
+
+(setq package-selected-packages donald/packages)
+
+(defun donald/packages-installed-p ()
+  (loop for pkg in donald/packages
+        when (not (package-installed-p pkg)) do (return nil)
+        finally (return t)))
+	;;check all packages is install? if no, return fault
+
+(unless (donald/packages-installed-p)
+  (message "%s" "Refreshing package database...")
+  (package-refresh-contents)
+  (dolist (pkg donald/packages)
+    (when (not (package-installed-p pkg))
+      (package-install pkg))))
+#+END_SRC
+
+*** 2.install a theme
+**** 用(load-theme '??？ t) 来
+#+BEGIN_SRC 
+(load-theme 'molokai t)
+#+END_SRC
+
+*** 3.hungry-delete
+**** packge 加入hungry-delete
+#+BEGIN_SRC emacs-lisp
+(require 'hungry-delete)
+(global-hungry-delete-mode)
+#+END_SRC
+
+*** 4.package-list
+#+BEGIN_SRC emacs-lisp
+M-x package-list-packages
+#+END_SRC
+
+*** 5.install smex and ivy
+**** 自己去melpa看功能
+**** ivy 可能要装swiper (与smex冲突?)
+**** 我觉得ivy足矣
+
+*** 6.customize-group
+#+BEGIN_SRC emacs-lisp
+M-x customize-group package-name
+#+END_SRC
+**** 修改插件的时间、功能，比如company的时间
+**** ex:
+#+BEGIN_SRC emacs-lisp
+(setq-default company-idle-delay 0.1)
+(setq-default company-minimum-prefix-length 1)
+#+END_SRC
+
+*** 7.smartparens
+**** 自动补全括号，自己安装，去melpa看配置
+
+*** 8.M-enter
+**** 自动修补错误行号
+
+*** 9.不要老想升级package，容易错误。
+
+** javascript IDE
+#+BEGIN_SRC emacs-lisp
+(setq auto-mode-alist
+	(append
+	'(("\\.文件名后缀\\'".???mode))
+	auto-mode-alist))
+#+END_SRC
+**** ex:
+#+BEGIN_SRC emacs-lisp
+(setq auto-mode-alist
+	(append
+	'(("\\.js\\'".js2-mode))
+	auto-mode-alist))
+#+END_SRC
+*** 1.js2-mode
+*** 2.nodejs-repl
+**** javascript的编译工具
+
+** Learn more from Emacs itself
+
+*** 1.C-h C-f, C-h C-v, C-h C-k
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-h C-f") 'find-function)
+(global-set-key (kbd "C-h C-v") 'find-variable)
+(global-set-key (kbd "C-h C-k") 'find-function-on-key)
+#+END_SRC
+
+*** 2.M-x info
+**** 有空好好看看
+
+** Org-mode
+*** 1.agenda files and agenda view
+#+BEGIN_SRC emacs-lisp
+(setq org-agenda-files '("~/.emacs.d/org"))
+(global-set-key (kbd "C-c a") 'org-agenda)	;;setting the name => todo
+;;C-c C-x additing date
+;;C-c C-s schedule items
+#+END_SRC
