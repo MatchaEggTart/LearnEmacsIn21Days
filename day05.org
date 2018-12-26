@@ -1,0 +1,182 @@
+* 
+** Fix smartparen quote issue
+-上一章补充
+*** 单引号补全
+#+BEGIN_SRC emacs-lisp
+;; (smartparens)
+(sp-local-pair 'emacs-lisp-mode "'" nil :actions nil)
+(sp-local-pair 'lisp-interaction-mode "'" nil :actions nil)
+
+;; 子龙山人现在不用了,说太aggressive 
+#+END_SRC
+
+*** 括号加强
+#+BEGIN_SRC emacs-lisp
+(define-advice show-paren-function (:around (fn) fix-show-paren-function)
+  "Highlight enclosing parens."
+  (cond ((looking-at-p "\\s(") (funcall fn))
+        (t (save-excursion
+             (ignore-errors (backward-up-list))
+             (funcall fn)))))
+#+END_SRC
+
+** Editing large web page
+
+*** 去掉.html的换行符ex: ^M
+**** 隐藏
+#+BEGIN_SRC emacs-lisp
+(defun hidden-dos-eol ()
+  "Do not show ^M in files containing mixed UNIX and DOS line endings."
+  (interactive)
+  (unless buffer-display-table
+    (setq buffer-display-table (make-display-table)))
+  (aset buffer-display-table ?\^M []))
+#+END_SRC
+
+-输入
+
+#+BEGIN_SRC emacs-lisp
+M-x hidden-dos-eol
+#+END_SRC
+
+**** 删除
+#+BEGIN_SRC emacs-lisp
+(defun remove-dos-eol ()
+  "Replace DOS eolns CR LF with Unix eolns CR"
+  (interactive)
+  (goto-char (point-min))
+  (while (search-forward "\r" nil t) (replace-match "")))
+#+END_SRC
+
+
+** Add more useful packages for web development
+
+*** web-mode
+-(CSS/JavaScript)
+**** install
+#+BEGIN_SRC emacs-lisp
+(defvar donald/packages '(
+                           ;; 你其他的插件在这里
+                           web-mode
+                           ) "Default packages")
+#+END_SRC
+
+**** setting major-mode
+#+BEGIN_SRC emacs-lisp
+
+#+END_SRC
+
+**** toggle indent in web-mode
+#+BEGIN_SRC emacs-lisp
+;; indent
+(defun my-web-mode-indent-setup ()
+  (setq web-mode-markup-indent-offset 2) ; web-mode, html tag in html file
+  (setq web-mode-css-indent-offset 2)    ; web-mode, css in html file
+  (setq web-mode-code-indent-offset 2)   ; web-mode, js code in html file
+  )
+
+(add-hook 'web-mode-hook 'my-web-mode-indent-setup)
+
+(defun my-toggle-web-indent ()
+  (interactive)
+  ;; web development
+  (if (or (eq major-mode 'js-mode) (eq major-mode 'js2-mode))
+      (progn
+        (setq js-indent-level (if (= js-indent-level 2) 4 2))
+        (setq js2-basic-offset (if (= js2-basic-offset 2) 4 2))))
+
+  (if (eq major-mode 'web-mode)
+      (progn (setq web-mode-markup-indent-offset (if (= web-mode-markup-indent-offset 2) 4 2))
+             (setq web-mode-css-indent-offset (if (= web-mode-css-indent-offset 2) 4 2))
+             (setq web-mode-code-indent-offset (if (= web-mode-code-indent-offset 2) 4 2))))
+  (if (eq major-mode 'css-mode)
+      (setq css-indent-offset (if (= css-indent-offset 2) 4 2)))
+
+  (setq indent-tabs-mode nil))
+
+(global-set-key (kbd "C-c t i") 'my-toggle-web-indent)
+#+END_SRC
+
+*** js2-refactor
+
+**** install
+#+BEGIN_SRC emacs-lisp
+(defvar donald/packages '(
+                           ;; 你其他的插件在这里
+			   js22-refactor
+                           ) "Default packages")
+#+END_SRC
+
+**** configs
+#+BEGIN_SRC emacs-lisp
+(add-hook 'js2-mode-hook #'js2-refactor-mode)
+(js2r-add-keybindings-with-prefix "C-c C-m")
+#+END_SRC
+
+** occur and imenu
+
+*** 1.improve occur
+-按M-s o看到代码定义，方便
+
+**** 在光标所在的字符串按M-s o就好了
+#+BEGIN_SRC emacs-lisp
+(defun occur-dwim ()
+  "Call `occur' with a sane default."
+  (interactive)
+  (push (if (region-active-p)
+            (buffer-substring-no-properties
+             (region-beginning)
+             (region-end))
+          (let ((sym (thing-at-point 'symbol)))
+            (when (stringp sym)
+              (regexp-quote sym))))
+        regexp-history)
+  (call-interactively 'occur))
+(global-set-key (kbd "M-s o") 'occur-dwim)
+#+END_SRC
+
+*** popwin设置长宽提示
+customize-group > popwin > Popup Window Position => right
+*** 2.improve imenu
+#+BEGIN_SRC emacs-lisp
+(defun js2-imenu-make-index ()
+      (interactive)
+      (save-excursion
+        ;; (setq imenu-generic-expression '((nil "describe\\(\"\\(.+\\)\"" 1)))
+        (imenu--generic-function '(("describe" "\\s-*describe\\s-*(\\s-*[\"']\\(.+\\)[\"']\\s-*,.*" 1)
+                                   ("it" "\\s-*it\\s-*(\\s-*[\"']\\(.+\\)[\"']\\s-*,.*" 1)
+                                   ("test" "\\s-*test\\s-*(\\s-*[\"']\\(.+\\)[\"']\\s-*,.*" 1)
+                                   ("before" "\\s-*before\\s-*(\\s-*[\"']\\(.+\\)[\"']\\s-*,.*" 1)
+                                   ("after" "\\s-*after\\s-*(\\s-*[\"']\\(.+\\)[\"']\\s-*,.*" 1)
+                                   ("Function" "function[ \t]+\\([a-zA-Z0-9_$.]+\\)[ \t]*(" 1)
+                                   ("Function" "^[ \t]*\\([a-zA-Z0-9_$.]+\\)[ \t]*=[ \t]*function[ \t]*(" 1)
+                                   ("Function" "^var[ \t]*\\([a-zA-Z0-9_$.]+\\)[ \t]*=[ \t]*function[ \t]*(" 1)
+                                   ("Function" "^[ \t]*\\([a-zA-Z0-9_$.]+\\)[ \t]*()[ \t]*{" 1)
+                                   ("Function" "^[ \t]*\\([a-zA-Z0-9_$.]+\\)[ \t]*:[ \t]*function[ \t]*(" 1)
+                                   ("Task" "[. \t]task([ \t]*['\"]\\([^'\"]+\\)" 1)))))
+(add-hook 'js2-mode-hook
+              (lambda ()
+                (setq imenu-create-index-function 'js2-imenu-make-index)))
+
+(global-set-key (kbd "M-s i") 'counsel-imenu)
+#+END_SRC
+
+** wrap region mode, expand-region, and iedit mode
+
+*** C-space 代替品，C-= C--
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-=") 'er/expand-region)
+#+END_SRC
+
+*** 神器iedit，同时修改(变量名有奇效)
+#+BEGIN_SRC emacs-lisp
+(require 'iedit)
+#+END_SRC
+
+** Bonue Time. Org export
+export to html, pdf
+
+C-c C-e
+
+org-html-fontify-code: Please install htmlize from https://github.com/hniksic/emacs-htmlize
+** Exercise
