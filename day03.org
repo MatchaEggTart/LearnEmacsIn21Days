@@ -1,0 +1,302 @@
+* 
+** Split your configs into multiple first
+*** 1.use Git to management your init file
+
+**** 上传配置
+#+BEGIN_SRC sh
+git init
+git add .
+git commit -m 'first commit'
+#+END_SRC
+**** 留意一下更新package可能会中招，不必要总是更新
+
+**** 自动更新emacs
+#+BEGIN_SRC emacs-lisp
+(global-auto-revert-mode t)
+#+END_SRC
+
+**** 禁止auto-save，auto-save录入300字符就开始保存
+#+BEGIN_SRC emacs-lisp
+(setq auto-save-default nil)
+#+END_SRC
+
+**** .gitignore
+***** 新建.gitignore，在里面输入
+#+BEGIN_SRC 
+auto-save-list
+#+END_SRC
+***** 用来忽略上传这个目录
+
+
+*** 2.help window is anoyying
+
+**** popwin插件
+-在package上自己安装，按C-g就可以瞬间退出查看目录，不需要C-x o + q退出
+#+BEGIN_SRC emacs-lisp
+(require 'popwin)
+(popwin-mode t)
+#+END_SRC
+
+
+*** 3.load-file, load-path and load
+-详细攻略
+-https://www.jianshu.com/p/b4cf683c25f3
+**** load-file
+-指定emacs加载某路经文件，不让emacs猜
+
+**** load
+-让emacs去猜，先去load-path找.elc文件，再找.el文件，没有就报错
+
+**** require
+-检查features，调用load函数加载，每个插件文件(.elc or .el)都有一句
+#+BEGIN_SRC emacs-lisp
+	(provide '***)
+ex:	(provide 'company-abbrev)
+	(provide 'init-packages)
+#+END_SRC
+-然后load函数用load-file来找关键字
+
+
+*** 4.features, provide and require, autoload
+
+**** feature
+-eature可以理解为“特色功能”，比如，你在苹果的App Store里查看应用程序简介时，一般都会看到一个以Features开头的段落。
+-单数形式，feature，一般对应一个插件的名字，因为一般插件的名字直接表明它实现的功能。
+-复数形式，features，是一个用来存储feature的列表，这个列表可以告诉emacs哪些插件经被加载了。
+-一般情况下，一个插件的启动脚本的结尾会调用(provide '<symbol name>)，将'<symbol name>加入到features中去。
+-'<symbol name>一般就是插件的名字
+
+作者：北魏企鹅
+链接：https://www.jianshu.com/p/b4cf683c25f3
+來源：简书
+简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。
+
+**** autoload
+-当运行(package-initialize)会加载elpa目录所有package，包括package里面的所有.el文件，.el文件里面有很多注释了autoload的关键字
+-再生成-autoloads.el文件(ex: company-autoloads.el)，便于emacs使用
+
+
+*** 5.nameing conventions
+-命名规范
+
+
+*** 6.define your abbrevs
+
+**** 简化
+#+BEGIN_SRC emacs-lisp
+(abbrev-mode t)
+  (define-abbrev-table 'global-abbrev-table '(
+  						("简化名" "真正函数名")
+))
+#+END_SRC
+***** 然后就可以输入简化名再按‘空格’就能简化了。
+
+
+*** 7.how to organize your configs
+**** provide后用require加载但是首先要输入
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path "/home/donald/.emacs.d/lisp/")
+#+END_SRC
+***** 可以用include来理解require
+
+
+**** 关闭警告音
+#+BEGIN_SRC emacs-lisp
+(setq ring-bell-function 'ignore)
+#+END_SRC
+
+
+**** custom.el
+ #+BEGIN_SRC emacs-lisp
+ (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+ #+END_SRC
+***** 自动生成的代码，用一个文件吃掉 
+
+
+**** init.el
+#+BEGIN_SRC emacs-lisp
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
+(add-to-list 'load-path "/home/donald/.emacs.d/lisp/")
+
+(defun open-my-init-file()
+  (interactive)
+  (find-file "/home/donald/.emacs.d/init.el"))
+
+;; (require 'init-func.el)
+(require 'init-packages)
+(require 'init-ui)
+(require 'init-better-defaults)
+(require 'init-keybindings)
+(require 'init-org)
+
+(setq custom-file (expand-file-name "/home/donald/.emacs.d/lisp/custom.el" user-emacs-directory))
+
+(load-file custom-file)
+#+END_SRC
+**** init-packages.el
+#+BEGIN_SRC emacs-lisp
+(when (>= emacs-major-version 24)
+  (require 'package)
+  (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                           ("melpa" . "https://melpa.org/packages/"))))
+
+;; cl - Common Lisp Extension
+(require 'cl)
+
+;; Add Packages
+(defvar donald/packages '(
+			  ;; --- Auto-completion ---
+			  company
+			  popwin
+			  hungry-delete
+			  spacemacs-theme
+			  solarized-theme
+			  ;;smartparens
+			  ) "Default packages")
+
+(setq package-selected-packages donald/packages)
+
+(defun donald/packages-installed-p ()
+  (loop for pkg in donald/packages
+        when (not (package-installed-p pkg)) do (return nil)
+        finally (return t)))
+
+(unless (donald/packages-installed-p)
+  (message "%s" "Refreshing package database...")
+  (package-refresh-contents)
+  (dolist (pkg donald/packages)
+    (when (not (package-installed-p pkg))
+      (package-install pkg))))
+
+
+
+;; (smartparens-global-mode t)
+
+(global-company-mode t)
+(setq-default company-idle-delay 0.1)
+(setq-default company-minimum-prefix-length 1)
+
+(global-hungry-delete-mode)
+
+(load-theme 'spacemacs-dark t)
+
+(require 'popwin)
+(popwin-mode 1)
+
+
+(provide 'init-packages)
+#+END_SRC
+**** init-ui.el
+#+BEGIN_SRC emacs-lisp
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+
+;; (setq inhibit-splash-screen t)
+;; (setq-default cursor-type 'bar)
+;; (setq initial-frame-alist (quote ((fullscreen . maximized))))
+;; (global-hl-line-mode t)
+
+(global-linum-mode t)
+
+(provide 'init-ui)
+#+END_SRC
+**** init-better-defaults.el
+#+BEGIN_SRC emacs-lisp
+;; (setq ring-bell-function 'ignore)
+
+(global-auto-revert-mode t)
+
+(setq make-backup-files nil)
+(setq auto-save-default nil)
+
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+
+(electric-pair-mode 1)
+(setq electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
+(show-paren-mode t)
+
+(add-hook 'emacs-lisp-mode-hook 'show-paren-mode)
+
+;; (abbrev-mode t)
+;; (define-abbrev-table 'global-abbrev-table '(
+;;					    ("abbreviation""full name")
+;;					    ("abbreviation""full name")
+;;					    ))
+
+(delete-selection-mode t)	;; mark set
+
+;; Menu Chinese  
+(set-language-environment 'Chinese-GB)
+
+;; utf-8
+(setq default-buffer-file-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+
+
+(provide 'init-better-defaults)
+
+#+END_SRC
+**** init-keybindings.el
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "<f5>") 'open-my-init-file)
+(global-set-key (kbd "<f7>") 'recentf-open-files)
+(global-set-key (kbd "C-h C-f") 'find-function)
+(global-set-key (kbd "C-h C-v") 'find-variable)
+(global-set-key (kbd "C-h C-k") 'find-function-on-key)
+
+(with-eval-after-load 'company
+  (define-key company-active-map (kbd "M-n") nil)
+  (define-key company-active-map (kbd "M-p") nil)
+  (define-key company-active-map (kbd "C-n") #'company-select-next)
+  (define-key company-active-map (kbd "C-p") #'company-select-previous))
+
+(provide 'init-keybindings)
+
+#+END_SRC
+**** init-org.el
+#+BEGIN_SRC emacs-lisp
+(require 'org)
+
+(setq org-src-fontify-natively t)
+
+(setq org-agenda-files '("~/org"))
+(global-set-key (kbd "C-c a") 'org-agenda)
+
+(provide 'init-org)
+#+END_SRC
+
+
+*** 8.use 'counsel-git' to find file in fit managed project.
+-你首先得安装counsel
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-c p f") 'counsel-git)
+#+END_SRC
+
+
+** Major mode and minor mode in details
+*** 1.conventions
+**** Major mode
+***** text-mode
+-编辑文本文件
+***** special-mode
+-?
+***** prog-mode
+-编程语言
+
+*** 2.mode key map and mode hook
+*** 3.let's take a look at a pacakge in elpa(company)
+
+** Better defaults
+
+** Dired mode and file related operations
+
+** Bonus Time. Use Org-mode literate programming to organize your Emacs configurations
+
+** Exercise
