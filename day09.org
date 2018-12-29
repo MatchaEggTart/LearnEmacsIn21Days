@@ -1,0 +1,63 @@
+* 
+** macro
+-可以生成代码的代码，用解释器，不用重复造轮子
+**** 代码
+#+BEGIN_SRC emacs-lisp
+(defmacro inc (var)
+  (list 'setq var (list '1+ var)))
+
+(setq my-var 1)
+(setq my-var (+ 1 my-var))
+
+(inc my-var)	;;add a new language
+
+(macroexpand '(inc my-var))
+
+#+END_SRC
+
+*** fuction && macro区别
+
+**** 宏的参数并不会被马上求值, 解释器会先展开宏, 宏展开之后解释器才会执行宏展开的 结果; 而函数的参数会马上求值
+
+**** 宏的执行结果是一个表达式, 该表达式会立即被解释器执行; 而函数的结果是一个值
+
+*** backquote(`)
+#+BEGIN_SRC emacs-lisp
+(defun my-print (number)
+  (message "This is a number: %d" number))	;; it hasn't ','
+
+(my-print 2)               ; 1. output= This is a number: 2
+(my-print (+ 2 3))         ; 2. output= This is a number: 5
+
+(quote (+ 1 1))
+;; return a list= (+ 1 1)
+
+(defmacro my-print-2 (number)
+  `(message "This is a number: %d", number))	;; it has ','
+
+(my-print-2 2)             ; 3. output= This is a number: 2
+(my-print-2 (+ 2 3))       ; 4. output= This is a number: 5
+
+(setq my-var 2)
+(inc my-var)
+
+(defmacro inc2 (var1 var2)
+  (list 'progn (list 'inc var1) (list 'inc var2)))
+
+(macroexpand '(inc2 my-var my-var))
+(macroexpand-all '(inc2 my-var my-var))
+
+(defmacro my-print-2 (number)
+  `(message "This is a number: %d" ,number))
+
+(pp (macroexpand '(my-print-2 (+ 2 3))))
+(my-print-2 (+ 2 3))
+#+END_SRC
+
+*** quote(')
+(+ 1 1) return 2
+(quote (+ 1 1)) return (+ 1 1)
+
+**** 传递格式
+
+*** 为什么要使用宏

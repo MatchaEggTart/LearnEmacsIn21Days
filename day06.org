@@ -1,0 +1,145 @@
+* 
+** Bonus Time
+
+*** Use org-capture to take notes
+
+#+BEGIN_SRC emacs-lisp
+(setq org-capture-templates
+      '(("t" "Todo" entry (file+headline "~/.emacs.d/gtd.org" "工作安排")
+         "* TODO [#B] %?\n  %i\n"
+         :empty-lines 1)))
+#+END_SRC
+
+**** 绑定按键(并不想，囧)
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-c r") 'org-capture)
+#+END_SRC
+
+**** M-x org-capture
+-创造事项表
+
+**** 把agenda的地址改为~/.emacs.d
+
+Further reading:orgmode.org/manual/Capture.html
+
+**** 并不生效
+***** 要把org配置放到
+#+BEGIN_SRC emacs-lisp
+(with-eval-after-load 'org
+  ;; Org 模式相关设定
+  )
+#+END_SRC
+
+ex:
+
+#+BEGIN_SRC emacs-lisp
+(with-eval-after-load 'org
+  (setq org-agenda-files '("~/.emacs.d"))
+
+  (setq org-src-fontify-natively t)
+
+  (setq org-capture-templates
+	'(("t" "Todo" entry (file+headline "~/.emacs.d/gtd.org" "工作安排")
+           "* TODO [#B] %?\n  %i\n"
+           :empty-lines 1)))
+  )
+
+#+END_SRC
+
+*** Install Org pomodora
+
+**** install
+#+BEGIN_SRC emacs-lisp
+(defvar donald/packages '(
+			  ;; --- Auto-completion ---
+			  org-pomodora
+			  ) "Default packages")
+
+(require 'org-pomodora)
+#+END_SRC
+
+**** 配置
+-没有苹果电脑，(T...T)
+
+**** 快捷键文件要在所有设置文件之后，安全
+
+** Company
+
+*** 快捷键
+
+#+BEGIN_SRC emacs-lisp
+(with-eval-after-load 'company
+  (define-key company-active-map (kbd "M-n") nil)
+  (define-key company-active-map (kbd "M-p") nil)
+  (define-key company-active-map (kbd "C-n") #'company-select-next)
+  (define-key company-active-map (kbd "C-p") #'company-select-previous))
+#+END_SRC
+
+** Batch rename files
+-批量改名
+
+*** 在diret mode，按C-x C-q进入编辑模式，使用上一章神器iedit来编辑C-;
+
+** search and replace
+
+*** install helm-ag
+-在目录下查找字符串
+**** 1.ag > pt > ack > grep
+
+***** terminal
+#+BEGIN_SRC sh
+sudo dnf install silversearcher-ag
+#+END_SRC
+
+***** emacs
+#+BEGIN_SRC emacs-lisp
+(defvar donald/packages '(
+			  ;; --- Auto-completion ---
+			  org-pomodora
+			  ) "Default packages")
+
+#+END_SRC
+
+**** 2.Use
+
+***** 
+#+BEGIN_SRC emacs-lisp
+M-x helm-do-ag-project-root
+#+END_SRC
+
+** Show javascript errors with flycheck
+
+*** 1.flycheck-checkers
+-检查错误的
+**** emacs
+#+BEGIN_SRC emacs-lisp
+(defvar donald/packages '(
+			  ;; --- Auto-completion ---
+			  flycheck
+			  ) "Default packages")
+;; (global-flycheck-mode)		
+(add-hook 'js2-mode-hook 'flycheck-mode)
+#+END_SRC
+
+**** add-hook
+***** 在某个major-mode下配置，与全局相反，挂钩子
+
+*** 2.eslint
+-Javascript语法检测器
+
+** Snippets and auto snippet
+
+**** emacs
+#+BEGIN_SRC emacs-lisp
+(defvar donald/packages '(
+			  ;; --- Auto-completion ---
+			  yasnippet
+			  auto-yasnippet
+			  ) "Default packages")
+(require 'yasnippet)
+(yas-reload-all)
+(add-hook 'prog-mode-hook #'yas-minor-mode)	;; use in prog-mode
+
+(global-set-key (kbd "H-w") #'aya-create)
+(global-set-key (kbd "H-y") #'aya-expand)
+#+END_SRC

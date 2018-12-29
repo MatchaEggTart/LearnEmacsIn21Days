@@ -1,0 +1,13 @@
+* 
+** Cask
+-package管理工具，管理多个版本的EMACS
+*** install
+**** fedora
+#+BEGIN_SRC sh
+sudo dnf install cask
+#+END_SRC
+
+** pallet
+#+BEGIN_SRC emacs-lisp
+M-x package-install pallet
+#+END_SRC
