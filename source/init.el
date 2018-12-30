@@ -15,12 +15,12 @@
   (interactive)
   (dired "/home/donald/.emacs.d/lisp/"))
 
-;; (require 'init-func.el)
 (require 'init-ui)
 (require 'init-better-defaults)
 (require 'init-packages)
 (require 'init-keybindings)
 (require 'init-org)
+(require 'init-c-c++)
 
 (setq custom-file (expand-file-name "/home/donald/.emacs.d/lisp/custom.el" user-emacs-directory))
 

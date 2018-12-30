@@ -15,7 +15,6 @@
 			  hungry-delete
 			  spacemacs-theme
 			  solarized-theme
-			  ;;smartparens
 			  iedit
 			  ) "Default packages")
 
@@ -35,19 +34,21 @@
 
 
 
-;; (smartparens-global-mode t)
-
+;; company
 (global-company-mode t)
 (setq-default company-idle-delay 0.2)
 (setq-default company-minimum-prefix-length 2)
 
+;; hungry-delete
 (global-hungry-delete-mode)
 
-(load-theme 'spacemacs-dark t)
+(load-theme 'solarized-dark t)
 
+;; popwin
 (require 'popwin)
 (popwin-mode 1)
 
+;; iedit
 (require 'iedit)
 
 (provide 'init-packages)

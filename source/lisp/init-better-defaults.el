@@ -37,6 +37,7 @@
 (prefer-coding-system 'utf-8)
 
 ;; Dired Mode
+(require 'dired-x)
 (setq dired-recursive-deletes 'always)
 (setq dired-recursive-copies 'always)
 
@@ -44,7 +45,7 @@
 
 (with-eval-after-load 'dired
     (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file))
-(require 'dired-x)
+
 
 
 (provide 'init-better-defaults)
