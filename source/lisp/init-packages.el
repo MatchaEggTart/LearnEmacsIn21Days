@@ -1,7 +1,8 @@
 (when (>= emacs-major-version 24)
   (require 'package)
   (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                           ("melpa" . "https://melpa.org/packages/"))))
+                           ("melpa" . "https://melpa.org/packages/")
+			   ("melpa-stable" . "https://stable.melpa.org/packages/"))))
 
 ;; cl - Common Lisp Extension
 (require 'cl)
