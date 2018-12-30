@@ -1,5 +1,5 @@
 ;; google-c-style  
-(add-to-list 'load-path "/home/donald/.emacs.d/site-lisp/google-style")  
+(add-to-list 'load-path "/home/donald/.emacs.d/google-style")  
 (require 'google-c-style)  
 (add-hook 'c-mode-common-hook 'google-set-c-style)  
 (defun my-c-mode-hook ()  
