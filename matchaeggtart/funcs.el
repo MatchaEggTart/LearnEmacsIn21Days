@@ -1,0 +1,15 @@
+;; (defun open-my-init-file()
+;;  (interactive)
+;;  (find-file "/home/donald/.spacemacs.d/init.el"))
+
+(defun open-my-layers()
+  (interactive)
+  (dired "/home/donald/.spacemacs.d/layers/"))
+
+(defun matchaeggtart/open-file-with-projectile-or-counsel-git ()
+  (interactive)
+  (if (zilongshanren/vcs-project-root)
+      (counsel-git)
+    (if (projectile-project-p)
+        (projectile-find-file)
+      (ido-find-file))))
