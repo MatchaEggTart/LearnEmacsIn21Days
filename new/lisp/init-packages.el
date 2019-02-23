@@ -8,22 +8,22 @@
 (require 'cl)
 
 ;; Add Packages
-(defvar donald/packages '(
+(defvar jiajun/packages '(
 			  ;; --- Auto-completion ---
 			  use-package
 			  ) "Default packages")
 
-(setq package-selected-packages donald/packages)
+(setq package-selected-packages jiajun/packages)
 
-(defun donald/packages-installed-p ()
-  (loop for pkg in donald/packages
+(defun jiajun/packages-installed-p ()
+  (loop for pkg in jiajun/packages
         when (not (package-installed-p pkg)) do (return nil)
         finally (return t)))
 
-(unless (donald/packages-installed-p)
+(unless (jiajun/packages-installed-p)
   (message "%s" "Refreshing package database...")
   (package-refresh-contents)
-  (dolist (pkg donald/packages)
+  (dolist (pkg jiajun/packages)
     (when (not (package-installed-p pkg))
       (package-install pkg))))
 
