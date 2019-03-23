@@ -1,6 +1,6 @@
 ;; google-c-style  
 (use-package google-c-style
-  :load-path "/home/jiajun/.emacs.d/styleguide"
+  :load-path "~/.emacs.d/styleguide"
   :init
   (add-hook 'c-mode-common-hook 'google-set-c-style)
   :config
@@ -11,7 +11,7 @@
   )
 
 
-;; (add-to-list 'load-path "/home/jiajun/.emacs.d/google-style")  
+;; (add-to-list 'load-path "~/.emacs.d/google-style")  
 ;; (require 'google-c-style)  
 ;; (add-hook 'c-mode-common-hook 'google-set-c-style)  
 ;; (defun my-c-mode-hook ()  
