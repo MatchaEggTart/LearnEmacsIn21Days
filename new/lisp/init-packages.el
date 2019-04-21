@@ -63,6 +63,8 @@
   :config
   (setq-default company-idle-delay 0.1)
   (setq-default company-minimum-prefix-length 2)
+  ;; close the ignoreCase
+  (setq company-dabbrev-downcase nil)
   :bind
   (:map company-active-map
 	 ("M-n" . nil)
@@ -77,7 +79,6 @@
   :config
   (add-to-list 'company-backends 'company-c-headers)
   )
-
 
 
 
