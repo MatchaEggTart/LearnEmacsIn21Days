@@ -1,7 +1,15 @@
-# LearnEmacsIn21Days
-这是『21天学会Emacs，从入门到懵逼』的学习笔记。<br>
+# Learn Emacs
+21天我学废emacs旧版本
+http://book1.emacs-china.org/
+<br/>
+21天我学废emacs新版本
+https://book.emacs-china.org/
+<br/>
+参考
+https://www.bilibili.com/video/BV13g4y167Zn?spm_id_from=333.999.0.0
+<br/>
+这是『21天学会Emacs，从入门到懵逼』+『Emacs高手修炼手册』的学习笔记。<br>
 首先感谢子龙山人的教学，链接在这里<br>
-http://v.youku.com/v_show/id_XMTUwNjU0MjE0OA==.html<br>
 https://github.com/emacs-china/Spacemacs-rocks<br>
 以下就是我的学习笔记。<br>
 *<br>
