@@ -159,7 +159,7 @@
     >&emsp;这些命令全都可以用 M-x 来启动\
     >C-h i       阅读手册
 
-  * 主要术语的译词对照，并给出注释说明：
+  * 主要术语的译词对照，并给出注释说明：\
     &emsp;command               命令\
     &emsp;cursor                光标\
     &emsp;scrolling             滚动\
