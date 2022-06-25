@@ -247,11 +247,11 @@
     cursor            | 光标
     scrolling         | 滚动
     numeric argument  | 数字参数
-    window            | 窗格 [1]
+    window            | 窗格
     insert            | 插入
-    delete            | 删除 [2]
-    kill              | 移除 [2]
-    yank              | 召回 [2]
+    delete            | 删除
+    kill              | 移除
+    yank              | 召回
     undo              | 撤销
     file              | 文件
     buffer            | 缓冲区
@@ -259,4 +259,4 @@
     echo area         | 回显区
     mode line         | 状态栏
     search            | 搜索
-    incremental search| 渐进式搜索 [3]
+    incremental search| 渐进式搜索
