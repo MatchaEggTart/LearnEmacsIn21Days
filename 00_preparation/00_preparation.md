@@ -4,14 +4,20 @@
     1. 修改 ~/.emacs.d/init.el
 
         ```shell {.line-numbers}
-
         emacs ~/.emacs.d/init.el
         ```
 
         添加一行
 
         ```lisp {.line-numbers}
+        ;; Encore UTF-8
         (set-language-environment "UTF-8")
+        (setq default-buffer-file-coding-system 'UTF-8)
+        (prefer-coding-system 'utf-8)
+
+        ;; No Backup
+        (setq make-backup-files nil)
+        (setq auto-save-default nil)
         ```
 
         使用 [Ctrl]+[x] [Ctrl]+[s] 保存\
