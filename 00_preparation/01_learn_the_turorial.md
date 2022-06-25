@@ -103,7 +103,7 @@
   * 关闭文件自动备份
 
       ```lisp {.line-numbers}
-      M-x customize-variable <Return make-backup-files <Return
+      M-x customize-variable <Return> make-backup-files <Return>
       ```
 
   * 缓冲区(BUFFER)
