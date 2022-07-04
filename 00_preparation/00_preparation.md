@@ -19,9 +19,9 @@
         (setq make-backup-files nil)
         (setq auto-save-default nil)
 
-	;; 显示行号
-	(global-linum-mode 1)
-	```
+        ;; 显示行号
+        (global-linum-mode 1)
+        ```
 
         使用 [Ctrl]+[x] [Ctrl]+[s] 保存\
         使用 [Ctrl]+[x] [Ctrl]+[c] 退出
