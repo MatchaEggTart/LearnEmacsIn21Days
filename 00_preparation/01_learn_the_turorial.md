@@ -240,7 +240,7 @@
 
     指令|功能
     ---|---
-    /sudo::[Tab]| 在emacs内使用root权限
+    /sudo:root@localhost:/| 在emacs内使用root权限
 
   * 跳到指定行
 
