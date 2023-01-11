@@ -1,10 +1,11 @@
 # 准备
 
 * 首先如何设置 emacs 编码 为utf-8
-    1. 修改 ~/.emacs.d/init.el
+    1. 创建 ~/.config/emacs/init.el
 
         ```shell {.line-numbers}
-        emacs ~/.emacs.d/init.el
+        mkdir -p ~/.config/emacs/
+        emacs ~/.config/emacs/init.el
         ```
 
         添加一行
