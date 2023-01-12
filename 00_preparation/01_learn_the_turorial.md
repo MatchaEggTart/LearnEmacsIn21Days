@@ -263,6 +263,7 @@
     指令|功能
     ---|---
     /sudo:root@localhost:/| 在emacs内使用root权限
+    /sudo::/| 在emacs内使用root权限
 
   * 跳到指定行
 
