@@ -9,4 +9,4 @@ Windows SharpKeys 进行改键
 
 ** 学习 Elisp
 
-[Learn X in Y minutes][[https://learnxinyminutes.com/docs/elisp/]]
+[[https://learnxinyminutes.com/docs/elisp/][Learn X in Y minutes]]
