@@ -1,0 +1,109 @@
+* 第三天
+
+** 设置
+
+*** 补全(暂时使用而已)
+
+# +BEGIN_SRC emacs-lisp
+(setq tab-always-indent 'complete)
+(icomplete-mode t)
+# +END_SRC
+
+*** 括号补全
+
+# +BEGIN_SRC emacs-lisp
+;; 括号补全
+(electric-pair-mode t)
+# +END_SRC
+
+*** 启动最大化
+
+# +BEGIN_SRC emacs-lisp
+;; 自动最大化
+(toggle-frame-maximized)
+# +END_SRC
+
+*** 关闭各种栏
+
+# +BEGIN_SRC emacs-lisp
+;; 关闭工具栏，tool-bar-mode 即为一个 Minor Mode
+(tool-bar-mode -1)
+
+;; 关闭文件滑动控件
+(scroll-bar-mode -1)
+
+;; 显示行号
+(global-linum-mode 1)
+# +END_SRC
+
+*** 快速打开配置文件
+
+# +BEGIN_SRC emacs-lisp
+;; 定义 open-init-file 函数
+;; 使用 find-file 功能，打开拼接了 init.el 的字符串地址
+(defun open-init-file()
+  (interactive)
+  (find-file (concat user-emacs-directory "init.el")))
+
+;; 将 open-init-file 绑定在 F5键  
+(global-set-key (kbd "<f5>") 'open-init-file)
+
+*** 设置字体(好像没用)
+
+# +BEGIN_SRC emacs-lisp
+(set-face-attribute 'default nil :height 160)
+# +END_SRC
+
+*** 手动安装 Comany
+
+# +BEGIN_SRC emacs-lisp
+;; 开启全局 Company 补全
+(global-company-mode 1)
+;; 多少字符开始提示补全
+(setq company-minimum-prefix-length 1)
+;; 补全提醒时间
+(setq company-idle-delay 0)
+
+;; company mode 默认选择上一条和下一条候选项命令 M-n M-p
+(define-key company-active-map (kbd "C-n") 'company-select-next)
+(define-key company-active-map (kbd "C-p") 'company-select-previous)
+# +END_SRC
+
+
+** 学习 Elisp
+
+*** Elisp 简单例子
+
+# +BEGIN_SRC emacs-lisp
+;; 2 + 2
+(+ 2 2)
+
+;; 2 + 3 * 4
+(+ 2 (* 3 4))
+
+;; 定义变量
+(setq name "username")
+(message name) ; -> "username"
+
+;; 定义函数
+(defun func ()
+  (message "Hello, %s" name))
+
+;; 执行函数
+(func) ; -> Hello, username
+
+;; 设置快捷键
+(global-set-key (kbd "<f1>") 'func)
+
+;; 使函数可直接被调用可添加 (interactive)
+(defun func ()
+  (interactive)
+  (message "Hello, %s" name))
+# +END_SRC
+
+
+** 一丢丢 Org 知识
+
+*** TODO
+
+按 C-c C-t 可以变成 TODO 或 DONE

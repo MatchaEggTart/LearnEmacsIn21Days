@@ -4,6 +4,51 @@
 
 *** 开启行号
 
-使用 M-x linum-mode 开启行号
+# +BEGIN_SRC emacs-lisp
+(global-linum-mode 1)
+# +END_SRC
 
-***
+
+*** 关闭启动界面
+
+# +BEGIN_SRC emacs-lisp
+(setq inhibit-startup-screen t)
+# +END_SRC
+
+
+*** 获取帮助
+
+**** 寻找快捷键的帮助信息
+C-h k
+**** 寻找变量的帮助信息
+C-h v
+**** 寻找函数的帮助信息
+C-h f
+
+
+
+** Windows 使用 Emacs 打开文件
+
+*** 注册表添加 脚本文件
+
+# +BEGIN_SRC reg
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\*\shell]
+[HKEY_CLASSES_ROOT\*\shell\openwemacs]
+@="&Edit with Emacs"
+[HKEY_CLASSES_ROOT\*\shell\openwemacs\command]
+@="C:\\emax64\\bin\\emacsclientw.exe -n \"%1\""
+[HKEY_CLASSES_ROOT\Directory\shell\openwemacs]
+@="Edit &with Emacs"
+[HKEY_CLASSES_ROOT\Directory\shell\openwemacs\command]
+@="C:\\emax64\\bin\\emacsclientw.exe -n \"%1\""
+# +END_SRC
+
+
+
+*** Emacs 的 init.el 文件添加
+
+# +BEGIN_SRC emacs-lisp
+(server-mode 1)
+# +END_SRC
