@@ -1,5 +1,6 @@
 * 第一天
-** windows 安装 emacs
-** windows 改键
-** 学习 elisp
+** 安装 Emacs
+** Windows 改键
+** Mac 改键
+** 学习 Elisp
 [Learn X in Y minutes](https://learnxinyminutes.com/docs/elisp/)
