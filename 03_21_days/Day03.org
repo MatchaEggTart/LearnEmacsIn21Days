@@ -51,6 +51,7 @@
 *** 设置字体(好像没用)
 
 # +BEGIN_SRC emacs-lisp
+;; http://stackoverflow.com/questions/294664/how-to-set-the-font-size-in-emacs
 (set-face-attribute 'default nil :height 160)
 # +END_SRC
 
@@ -69,6 +70,14 @@
 (define-key company-active-map (kbd "C-p") 'company-select-previous)
 # +END_SRC
 
+
+*** 滚轮设置
+
+# +BEGIN_SRC emacs-lisp
+;;让鼠标滚动更好用
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))
+(setq mouse-wheel-progressive-speed nil)
+# +END_SRC
 
 ** 学习 Elisp
 
