@@ -1,0 +1,3 @@
+lexical binding
+开头加上 ;; -*- lexical-binding: t -*-
+利于并发

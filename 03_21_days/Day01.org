@@ -1,0 +1,5 @@
+* 第一天
+** windows 安装 emacs
+** windows 改键
+** 学习 elisp
+[Learn X in Y minutes](https://learnxinyminutes.com/docs/elisp/)
