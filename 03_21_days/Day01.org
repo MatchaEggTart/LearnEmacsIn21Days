@@ -1,6 +1,12 @@
 * 第一天
+
 ** 安装 Emacs
-** Windows 改键
-** Mac 改键
+
+** Windows Mac 改键
+
+Mac Modifier Keys 进行改键
+Windows SharpKeys 进行改键
+
 ** 学习 Elisp
-[Learn X in Y minutes](https://learnxinyminutes.com/docs/elisp/)
+
+[Learn X in Y minutes][[https://learnxinyminutes.com/docs/elisp/]]
