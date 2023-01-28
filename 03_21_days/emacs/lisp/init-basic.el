@@ -23,7 +23,7 @@
 (load custom-file 'no-error 'no-message)
 
 ;; 关闭提示音
-(setq auto-save-default nil)
+(setq ring-bell-function 'ignore)
 
 (provide 'init-basic)
 

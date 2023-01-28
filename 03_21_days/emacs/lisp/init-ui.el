@@ -32,7 +32,8 @@
 ;; 安装主题
 (use-package modus-themes
   :init (load-theme 'modus-operandi-tinted :no-confim))
-;;  :init (load-theme 'modus-vivendi-tinted :no-confim))
+  ;; :init (load-theme 'modus-vivendi-tinted :no-confim))
+  ;; :init (load-theme 'modus-vivendi-deuteranopia :no-confim))
 
 ;; mode-line 显示 文件大小
 (use-package simple

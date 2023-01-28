@@ -13,10 +13,10 @@
               (daemonp)))
   :init (exec-path-from-shell-initialize))
 
-(use-package vterm
-  ;; :ensure t
-  ;; :confit (display-line-numbers-mode nil))
-  )
+;; (use-package vterm
+;; :ensure t
+;; :confit (display-line-numbers-mode nil))
+;;  )
 
 ;; 自动补全(新)
 (use-package company
@@ -26,7 +26,10 @@
    company-minimum-prefix-length 1
    ;; 补全时间等待
    ;; company-idle-delay 0
-   company-show-quick-access t))
+   company-show-quick-access t)
+  :bind (:map company-active-map
+	      ("C-n" . 'company-select-next)
+	      ("C-p" . 'company-select-previous)))
 
 
 (provide 'init-develop)
