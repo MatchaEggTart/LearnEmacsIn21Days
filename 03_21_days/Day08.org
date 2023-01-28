@@ -1,0 +1,183 @@
+* 第八天
+
+
+** 配置
+
+*** 文件即时刷新同步
+
+**** HOW
+
+#+begin_src emacs-lisp
+  ;; 文件即时同步刷新
+  (global-auto-revert-mode 1) ; 其实默认开启了
+#+end_src
+
+
+*** 关闭自动保存文件
+
+**** HOW
+
+#+begin_src emacs-lisp
+  (setq auto-save-default nil)
+#+end_src
+
+
+*** 关闭提示音
+
+**** HOW
+
+#+begin_src emacs-lisp
+  ;; 关闭提示音
+  (setq auto-save-default nil)
+#+end_src
+
+
+*** y 和 n 取代 yes 和 no
+
+**** HOW
+
+#+begin_src emacs-lisp
+  ;; y 和 n 取代 yes 和 no
+  ;; (defalias 'yes-or-no-p 'y-or-n-p)
+  (fset 'yes-or-no-p 'y-or-n-p)
+#+end_src
+
+
+** Macro
+
+*** WHAT
+
+定义宏跟定义函数差不多，只是关键字不一样
+函数并不影响外部参数的值，而宏会
+
+*** EXAMPLE
+
+#+begin_src emacs-lisp
+  (setq my-var 1)
+  (setq my-var (1 + my-var))
+
+  ;; 定义宏
+  (defmarco inc (var)
+    (list 'setq var (list '1 + var)))
+
+  ;; 调用宏
+  (inc my-var)
+
+  macroexpand '(inc my-var) ; 打印表达式的值
+
+  ;; 定义函数
+  (defun inc-2 (var)
+    (setq var (1 + var)))
+
+  ;; 调用函数
+  (inc-2 my-var)
+#+end_src
+
+
+** [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Backquote.html][Backquote]]
+
+*** WHAT
+
+与 quote区别，quote只是符号类型，Backquote 会动态求值
+
+*** EXAMPLE
+
+#+begin_src emacs-lisp
+  ;; 定义 backquote
+  `(a list of ,(+ 2 3) elements)
+
+  ;; 定义 quote
+  '(a list of (+ 2 3) elements)
+
+  (setq some-list '(2 3))
+
+  `(1 ,@some-list 4 ,@some-list)
+#+end_src
+
+
+
+
+** Use-package
+
+*** WHAT
+
+一个宏
+一个包管理器
+
+*** WHY
+
+当一个包出错，它不会影响其他代码
+
+*** HOW
+
+**** 安装
+
+#+begin_src emacs-lisp
+  (package-install 'use-package)
+#+end_src
+
+**** 展开
+
+#+begin_src emacs-lisp
+  (if
+      (not
+       (require 'package-name nil 't))
+      (ignore
+       (message
+	(format "Cannot load %s" 'package-name))))
+#+end_src
+
+**** 将配置集中
+
+#+begin_src emacs-lisp
+  (use-package package-name
+    :init
+    (setq my-var1 "xxx")
+    :config
+    (progn
+      (setq my-var2 "xxx")
+      (setq my-var3 "xxx")
+      )
+    )
+#+end_src
+
+在上例中, init 后的代码在包的 require 之前执行, 如果这段代码出错则跳过包的 require
+config 后的代码在包的 require 之后执行
+init 与 config 之后只能接单个表达式语句, 如果需要执行多个语句, 可以用 progn
+
+
+** autoload
+
+*** WHAT
+使用 require 时会引入这个包, 但是当你的包很多时会影响启动速度
+而使用 autoload 则可以在真正需要这个包时再 require, 提高启动速度, 避免无谓的 require
+使用 commands 可以让 package 延迟加载, 如以上代码会首先判断 package 的符号是否 存在, 如果存在则在 package-name 的路径下加载
+defer 也可以让 package-name 进行延迟加载
+
+*** EXAMPLE
+
+#+begin_src emacs-lisp
+  (use-package package-name
+    :commands
+    (global-company-mode)
+    :defer t
+    )
+#+end_src
+
+
+** 键绑定
+
+*** HOW
+
+#+begin_src emacs-lisp
+  (use-package company
+    :bind (:map company-active-map
+		("C-n" . 'company-select-next)
+		("C-p" . 'company-select-previous))
+    :init
+    (global-company-mode t)
+    :config
+    (setq company-minimum-prefix-length 1)
+    (setq company-idle-delay 0))
+#+end_src
+

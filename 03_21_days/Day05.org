@@ -1,0 +1,270 @@
+* 第五天
+
+
+** [[https://www.gnu.org/software/emacs/manual/html_mono/eintr.html][An Introduction to Programming in Emacs Lisp]]
+
+*** WHAT
+
+Emacs Lisp 的 教学
+
+*** HOW
+
+可以网站访问，也可以使用 M-x info 选择 Emacs Lisp Intro
+
+
+** setq 与 setq-default 的区别
+
+*** WHAT
+
+setp 只对当前 buffer 的变量进行赋值
+
+setq-default 对全局 buffer 的变量进行赋值
+
+*** WHY
+
+因为 (setq cursor-type '(bar)) 没有生效，需要改成 (setq-default cursor-type '(bar))
+
+
+** 配置
+
+
+*** 括号前后提示
+
+#+BEGIN_SRC emacs-lisp
+  (show-paren-mode t)
+#+END_SRC
+
+其实默认开启了
+
+
+*** 禁止 Emacs 自动生成备份文件
+
+**** HOW
+
+#+BEGIN_SRC emacs-lisp
+  ;; No Backup
+  (setq make-backup-files nil)
+  (setq auto-save-default nil)
+#+END_SRC
+
+
+*** 打开最近编辑过的文件
+
+**** WHAT
+
+有两个选择，Emacs 默认的， 还有 consult 提供的，但是 consult 会卡，建议使用默认的
+
+**** HOW
+
+***** 配置1
+
+#+BEGIN_SRC emacs-lisp
+  ;; 打开最近文件
+  ;; 显示最近编辑过的文件
+  (require 'recentf)
+  (recentf-mode 1)
+  (setq recentf-max-menu-item 10)
+  (global-set-key (kbd "<f7>") 'recentf-open-files)
+  ;; consult 替代了默认 C-x b
+  (global-set-key (kbd "C-x b") 'consult-buffer)
+#+END_SRC
+
+***** 配置2
+
+~/.config/emacs/lisp/init-keybindings.el
+
+#+BEGIN_SRC emacs-lisp
+  ;; 打开最近文件
+  ;; 显示最近编辑过的文件
+  (require 'recentf)
+  (recentf-mode 1)
+  (setq recentf-max-menu-item 10)
+  (global-set-key (kbd "<f7>") 'recentf-open-files)
+#+END_SRC
+
+~/.config/emacs/lisp/init-edit.el
+
+#+BEGIN_SRC emacs-lisp
+  (use-package consult
+    :ensure t
+    :bind
+    ("C-s" . consult-line)
+    ("C-x b" . consult-buffer)
+    )
+#+END_SRC
+
+
+
+
+*** 选中内容可以直接被输入替换
+
+**** HOW
+
+#+BEGIN_SRC emacs-lisp
+  ;; 选中内容可以直接被输入内容取代Q
+  (delete-selection-mode 1)
+#+END_SRC
+
+
+*** 绑定查询三按键
+
+**** HOW
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-h C-f") 'find-function)
+  (global-set-key (kbd "C-h C-v") 'find-variable)
+  (global-set-key (kbd "C-h C-k") 'find-function-on-key)
+#+END_SRC
+
+
+*** shell 使用 unix 命令行
+
+**** WHAT
+
+这是 Windows 需要使用的，因为 Windows 的 Emacs 打开 shell 使用的还是 cmd 的命令
+安装 [[https://github.com/m-parashar/emax64][emax]]，解压到 Users/XXX/AppData/Roaming/.emacs.d 目录下
+配置 Emacs
+
+#+BEGIN_SRC
+  (progn
+	(defvar emax-root (concat (expand-file-name "~") "/emax"))
+	(defvar emax-bin (concat emax-root "/bin"))
+	(defvar emax-bin64 (concat emax-root "/bin64"))
+
+	(setq exec-path (cons emax-bin exec-path))
+	(setenv "PATH" (concat emax-bin ";" (getenv "PATH")))
+
+	(setq exec-path (cons emax-bin64 exec-path))
+	(setenv "PATH" (concat emax-bin64 ";" (getenv "PATH")))
+
+	(setq emacsd-bin (concat user-emacs-directory "bin"))
+	(setq exec-path (cons  emacsd-bin exec-path))
+	(setenv "PATH" (concat emacsd-bin  ";" (getenv "PATH")))
+
+	;;可选安装msys64
+	;;下载地址: http://repo.msys2.org/mingw/sources/
+	(setenv "PATH" (concat "C:\\msys64\\usr\\bin;C:\\msys64\\mingw64\\bin;" (getenv "PATH")))
+
+	;; (dolist (dir '("~/emax/" "~/emax/bin/" "~/emax/bin64/" "~/emax/lisp/" "~/emax/elpa/"))
+	;;   (add-to-list 'load-path dir))
+	)
+#+END_SRC
+
+
+** 手动安装插件方式
+
+*** WHY
+
+因为有些插件并没有发布到 MELPA，所以需要手动安装
+
+*** HOW
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'load-path (expand-file-name "插件地址"))
+  (require '插件暴露的名称)
+#+END_SRC
+
+
+** [[https://github.com/manateelazycat/awesome-tab][awesome-tab]]
+
+*** WHAT
+
+一款 tab 插件，更适合 gui 图形界面，其实对我来说没啥用
+
+*** HOW
+
+先下载
+
+#+BEGIN_SRC shell
+  mkdir -p ~/.config/emacs/elisp
+  git clone --depth=1 https://github.com/manateelazycat/awesome-tab.git ~/.config/emacs/elisp/awesome-tab
+#+END_SRC
+
+**** 方法1：
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'load-path (expand-file-name "~/elisp"))
+  (require 'awesome-tab)
+  (awesome-tab-mode t)
+#+END_SRC
+
+**** 方法2：
+
+#+BEGIN_SRC emacs-lisp
+  (use-package awesome-tab
+    :load-path "path/to/your/awesome-tab"
+    :config
+    (awesome-tab-mode t))
+#+END_SRC
+
+**** 配置方法
+
+.config/emacs/lisp/init-awesome-tab.el
+
+#+BEGIN_SRC emacs-lisp
+  ;;; init-awesome-tab.el --- awesome-tab plugins
+  ;;; Commentary:
+  ;;; Code:
+
+  (use-package awesome-tab
+    :demand t
+    :load-path "~/.config/emacs/elisp/awesome-tab"
+    :config
+    (awesome-tab-mode t)
+  
+    (defun awesome-tab-buffer-groups ()
+      "`awesome-tab-buffer-groups' control buffers' group rules.
+  Group awesome-tab with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
+  All buffer name start with * will group to \"Emacs\".
+  Other buffer group by `awesome-tab-get-group-name' with project name."
+      (list
+       (cond
+	((or (string-equal "*" (substring (buffer-name) 0 1))
+	     (memq major-mode '(magit-process-mode
+				magit-status-mode
+				magit-diff-mode
+				magit-log-mode
+				magit-file-mode
+				magit-blob-mode
+				magit-blame-mode)))
+	 "Emacs")
+	((derived-mode-p 'eshell-mode)
+	 "EShell")
+	((derived-mode-p 'dired-mode)
+	 "Dired")
+	((memq major-mode '(org-mode org-agenda-mode diary-mode))
+	 "OrgMode")
+	((derived-mode-p 'eaf-mode)
+	 "EAF")
+	(t
+	 (awesome-tab-get-group-name (current-buffer)))))))
+
+
+  (provide 'init-awesome-tab)
+
+  ;;; init-awesome-tab.el ends here
+#+END_SRC
+
+.config/emacs/init.el
+
+#+BEGIN_SRC emacs-lisp
+  (require 'init-awesome-tab)
+#+END_SRC
+
+
+
+
+** quote
+
+*** WHAT
+
+quote 语法糖，引用的意思，不返回结果，quote 操作过的表达式会返回 symbol类型，不是 string类型。
+symbol 类型被当作数据对象处理，而没有 quote 的 表达式会返回求值表达式，也就是程序
+
+*** EXAMPLE
+
+#+BEGIN_SRC emacs-lisp
+  (print '(+ 1 1)) ;; -> (+ 1 1)
+  (print (+ 1 1))  ;; -> 2
+#+END_SRC
+

@@ -1,0 +1,158 @@
+* 第六天
+
+
+** 使用 Emacs 来打开文件管理器
+
+
+*** WHAT
+
+使用 Emacs 打开文件管理器来查找东西
+
+*** HOW
+
+#+BEGIN_SRC emacs-lisp
+  (shell-command-to-string "explorer.exe C:\\")
+
+  (shell-command-to-string "explorer.exe ~/.emacs.d")
+
+  (shell-command-to-string
+   (encode-coding-string
+    (replace-regexp-in-string "/" "\\\\"
+		  (format "explorer.exe %s" (expand-file-name "~/.emacs.d")))
+    'gbk))
+
+  (defun consult-directory-externally (file)
+    "Open FILE externally using the default application of the system."
+    (interactive "fOpen externally: ")
+    (if (and (eq system-type 'windows-nt)
+	     (fboundp 'w32-shell-execute))
+	(shell-command-to-string (encode-coding-string (replace-regexp-in-string "/" "\\\\"
+	      (format "explorer.exe %s" (file-name-directory (expand-file-name file)))) 'gbk))
+      (call-process (pcase system-type
+		      ('darwin "open")
+		      ('cygwin "cygstart")
+		      (_ "xdg-open"))
+		    nil 0 nil
+		    (file-name-directory (expand-file-name file)))))
+
+   (define-key embark-file-map (kbd "E") #'consult-directory-externally)
+  ;;打开当前文件的目录
+  (defun my-open-current-directory ()
+    (interactive)
+    (consult-directory-externally default-directory))
+
+#+END_SRC
+
+
+** 增强 embark 和 consult，批量搜索替换大杀器
+
+
+*** WHAT
+
+consult 带着 consult-ripgrep，在UNIX系统中，用来搜索文件的工具 ripgrep
+搜索速度 grep < ack < ag < ripgrep(rg)
+而 embark-consult 可以将搜索到的文件中的字符串进行批量修改
+
+*** HOW
+
+**** 安装 [[https://github.com/BurntSushi/ripgrep][ripgrep]]
+
+#+BEGIN_SRC
+sudo dnf install ripgrep
+#+END_SRC
+
+**** 配置文件
+
+#+BEGIN_SRC emacs-lisp
+  ;; Consult users will also want the embark-consult package.
+  (use-package embark-consult
+    :ensure t ; only need to install it, embark loads it after consult if found
+    :hook
+    (embark-collect-mode . consult-preview-at-point-mode))
+
+  (package-install 'wgrep)
+  (setq wgrep-auto-save-buffer t)
+
+  (eval-after-load 'consult
+    '(eval-after-load 'embark
+       '(progn
+	  (require 'embark-consult)
+	  (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode))))
+
+  (defun embark-export-write ()
+    "Export the current vertico results to a writable buffer if possible.
+  Supports exporting consult-grep to wgrep, file to wdeired, and consult-location to occur-edit"
+    (interactive)
+    (require 'embark)
+    (require 'wgrep)
+    (pcase-let ((`(,type . ,candidates)
+		 (run-hook-with-args-until-success 'embark-candidate-collectors)))
+      (pcase type
+	('consult-grep (let ((embark-after-export-hook #'wgrep-change-to-wgrep-mode))
+			 (embark-export)))
+	('file (let ((embark-after-export-hook #'wdired-change-to-wdired-mode))
+		 (embark-export)))
+	('consult-location (let ((embark-after-export-hook #'occur-edit-mode))
+			     (embark-export)))
+	(x (user-error "embark category %S doesn't support writable export" x)))))
+
+  (define-key minibuffer-local-map (kbd "C-c C-e") 'embark-export-write)
+
+  ;;everyting
+  ;;consult-locate
+  ;; 配置搜索中文
+  ;; (progn
+  ;; (setq consult-locate-args (encode-coding-string "es.exe -i -p -r" 'gbk))
+  ;; (add-to-list 'process-coding-system-alist '("es" gbk . gbk)))
+
+  (eval-after-load 'consult
+    (progn
+      (setq
+       consult-narrow-key "<"
+       consult-line-numbers-widen t
+       consult-async-min-input 2
+       consult-async-refresh-delay  0.15
+       consult-async-input-throttle 0.2
+       consult-async-input-debounce 0.1)))
+#+END_SRC
+
+**** 如何批量替换
+
+先使用 M-x consult-ripgrep，输入字符串，然后 C-c C-e， 然后 M-%，进行递归替换
+
+**** WINDOWS
+
+WINDOWS 需要安装 Everything
+
+
+** 使用拼音进行搜索
+
+*** WHAT
+
+使用正则表达式来搜索中文
+
+*** HOW
+#+BEGIN_SRC emacs-lisp
+  ;; 拼音模糊搜索中文
+  (package-install 'pyim)
+
+  (defun eh-orderless-regexp (orig_func component)
+      (let ((result (funcall orig_func component)))
+	(pyim-cregexp-build result)))
+
+
+    (defun toggle-chinese-search ()
+      (interactive)
+      (if (not (advice-member-p #'eh-orderless-regexp 'orderless-regexp))
+	  (advice-add 'orderless-regexp :around #'eh-orderless-regexp)
+	(advice-remove 'orderless-regexp #'eh-orderless-regexp)))
+
+    (defun disable-py-search (&optional args)
+      (if (advice-member-p #'eh-orderless-regexp 'orderless-regexp)
+	  (advice-remove 'orderless-regexp #'eh-orderless-regexp)))
+
+    ;; (advice-add 'exit-minibuffer :after #'disable-py-search)
+    (add-hook 'minibuffer-exit-hook 'disable-py-search)
+
+    (global-set-key (kbd "C-c p") 'toggle-chinese-search)
+#+END_SRC

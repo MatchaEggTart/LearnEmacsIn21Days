@@ -1,0 +1,84 @@
+* 第七天
+
+** custom.el
+
+*** WHAT
+
+用来放置在 GUI 设置的配置的文件
+
+*** HOW
+
+#+BEGIN_SRC emacs-lisp
+  ;; 将 custom 数据放在 custom.el 文件里
+  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+  (load custom-file 'no-error 'no-message)
+#+END_SRC
+
+** 模块化管理
+
+*** WHAT
+
+主要使用 (add-to-list 'load-path "lisp路径") 、 (require '接口名称) 和 (provide '接口名称)
+
+要学会 expand-file-name (concat user-emacs-directory "lisp") 拼接字符串做路径
+
+** org-tempo
+
+*** WHAT
+
+在 org-mode，输入 <s TAB 会自动出现 代码块
+在代码块 输入 C-c ' 会出现一个 buffer 让你输入内容
+
+*** HOW
+
+#+begin_src emacs-lisp
+  ;; 快捷键 <s TAB 创建代码块
+  (require 'org-tempo) ; 开启 easy template
+#+end_src
+
+** org 来管理配置文件
+
+*** WHAT
+
+如果是 轻量级配置， 可以使用 Org 来管理，如果是 重量级文件 或者 需要多次修改，建议文档管理
+可以参考 [[https://github.com/trev-dev/emacs][trev-dev/emacs]] 的配置文件
+
+*** HOW
+
+将 配置文件内容都复制到 config.org 文件里
+
+.config/emacs/config.org
+
+#+begin_src emacs-lisp
+  ** packages
+  #+begin_src emacs-lisp
+    配置内容
+  #+end_src
+#+end_src
+
+在 init.el 清空内容添加
+
+#+begin_src emacs-lisp
+  (require 'org-install)
+  (require 'ob-tangle)
+  (org-babel-load-file (expand-file-name "config.org" user-emacs-directory))
+#+end_src
+
+** 配置
+
+*** org-mode 取消 尖括号补全
+
+**** HOW
+
+#+begin_src emacs-lisp
+;; 禁用左尖括号
+(setq electric-pair-inhibit-predicate
+      `(lambda (c)
+	 (if (char-equal c ?\<) t (,electric-pair-inhibit-predicate c))))
+
+(add-hook 'org-mode-hook
+	  (lambda ()
+	    (setq-local electric-pair-inhibit-predicate
+			`(lambda (c)
+			   (if (char-equal c ?\<) t (,electric-pair-inhibit-predicate c))))))
+#+end_src
