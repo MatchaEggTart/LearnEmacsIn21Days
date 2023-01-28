@@ -1,5 +1,6 @@
 * 第四天
 
+
 ** lexical binding
 
 *** WHAT
@@ -10,26 +11,26 @@
 
 .el 文件最上面加入
 
-# +BEGIN_SRC emacs-lisp
-;; -*- lexical-binding: t -*-
-# +END_SRC
+#+BEGIN_SRC emacs-lisp
+  ;; -*- lexical-binding: t -*-
+#+END_SRC
 
 *** EXAMPLE
 
-# +BEGIN_SRC emacs-lisp
-;;在文件最开头添加地个 文件作用域的变量设置，设置变量的绑定方式
-;; -*- lexical-binding: t -*-
-(let ((x 1))    ; x is lexically bound.
-  (+ x 3))
-     ⇒ 4
+#+BEGIN_SRC emacs-lisp
+  ;;在文件最开头添加地个 文件作用域的变量设置，设置变量的绑定方式
+  ;; -*- lexical-binding: t -*-
+  (let ((x 1))    ; x is lexically bound.
+    (+ x 3))
+       ⇒ 4
 
-(defun getx ()
-  x)            ; x is used free in this function.
+  (defun getx ()
+    x)            ; x is used free in this function.
 
-(let ((x 1))    ; x is lexically bound.
-  (getx))
-;;error→ Symbol's value as variable is void: x
-# +END_SRC
+  (let ((x 1))    ; x is lexically bound.
+    (getx))
+  ;;error→ Symbol's value as variable is void: x
+#+END_SRC
 
 
 ** package
@@ -38,16 +39,16 @@
 包管理器
 
 *** HOW
-# +BEGIN_SRC emacs-lisp
-(require 'package)
-(setq package-archives '(("gnu"   . "http://elpa.zilongshanren.com/gnu/")
-			 ("melpa" . "http://elpa.zilongshanren.com/melpa/")))
-(package-initialize)
+#+BEGIN_SRC emacs-lisp
+  (require 'package)
+  (setq package-archives '(("gnu"   . "http://elpa.zilongshanren.com/gnu/")
+			   ("melpa" . "http://elpa.zilongshanren.com/melpa/")))
+  (package-initialize)
 
-;;防止反复调用 package-refresh-contents 会影响加载速度
-(when (not package-archive-contents)
-  (package-refresh-contents))
-# +END_SRC
+  ;;防止反复调用 package-refresh-contents 会影响加载速度
+  (when (not package-archive-contents)
+    (package-refresh-contents))
+#+END_SRC
 
 
 ** keycast
@@ -57,11 +58,11 @@ Emacs 提示 输入快捷键的插件
 
 *** HOW
 
-# +BEGIN_SRC emacs-lisp
-;; modeline上显示我的所有的按键和执行的命令
-(package-install 'keycast)
-(keycast-mode t)
-# +END_SRC
+#+BEGIN_SRC emacs-lisp
+  ;; modeline上显示我的所有的按键和执行的命令
+  (package-install 'keycast)
+  (keycast-mode t)
+#+END_SRC
 
 
 ** vertico 和 orderless
@@ -72,53 +73,53 @@ Emacs 提示 输入快捷键的插件
 *** HOW
 **** 普通使用
 
-# +BEGIN_SRC emacs-lisp
-;; 必须关闭 icomplete-mode
-;; (icomplete-mode t)
+#+BEGIN_SRC emacs-lisp
+  ;; 必须关闭 icomplete-mode
+  ;; (icomplete-mode t)
 
-(package-install 'vertico)
-(vertico-mode t)
+  (package-install 'vertico)
+  (vertico-mode t)
 
-(package-install 'orderless)
-(setq completion-styles '(orderless))
-# +END_SRC
+  (package-install 'orderless)
+  (setq completion-styles '(orderless))
+#+END_SRC
 
 **** use-package 管理
 
-# +BEGIN_SRC emacs-lisp
-;; Enable vertico
-(use-package vertico
-  :init
-  (vertico-mode)
+#+BEGIN_SRC emacs-lisp
+  ;; Enable vertico
+  (use-package vertico
+    :init
+    (vertico-mode)
 
-  ;; Different scroll margin
-  ;; (setq vertico-scroll-margin 0)
+    ;; Different scroll margin
+    ;; (setq vertico-scroll-margin 0)
 
-  ;; Show more candidates
-  ;; (setq vertico-count 20)
+    ;; Show more candidates
+    ;; (setq vertico-count 20)
 
-  ;; Grow and shrink the Vertico minibuffer
-  ;; (setq vertico-resize t)
+    ;; Grow and shrink the Vertico minibuffer
+    ;; (setq vertico-resize t)
 
-  ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
-  ;; (setq vertico-cycle t)
-  )
+    ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
+    ;; (setq vertico-cycle t)
+    )
 
-;; Persist history over Emacs restarts. Vertico sorts by history position.
-(use-package savehist
-  :init
-  (savehist-mode))
+  ;; Persist history over Emacs restarts. Vertico sorts by history position.
+  (use-package savehist
+    :init
+    (savehist-mode))
 
-;; Optionally use the `orderless' completion style.
-(use-package orderless
-  :init
-  ;; Configure a custom style dispatcher (see the Consult wiki)
-  ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
-  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
-  (setq completion-styles '(orderless basic)
-        completion-category-defaults nil
-        completion-category-overrides '((file (styles partial-completion)))))
-# +END_SRC
+  ;; Optionally use the `orderless' completion style.
+  (use-package orderless
+    :init
+    ;; Configure a custom style dispatcher (see the Consult wiki)
+    ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
+    ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+    (setq completion-styles '(orderless basic)
+	  completion-category-defaults nil
+	  completion-category-overrides '((file (styles partial-completion)))))
+#+END_SRC
 
 ***** 
 
@@ -126,34 +127,34 @@ Emacs 提示 输入快捷键的插件
 ** marginalia
 
 *** WHAT
-# 
+ 
 增强 minibuffer 提示，minibufuffer 可以显示 文件大小权限，按键功能会有了提示
 
 *** HOW
 **** 普通使用
 
-# +BEGIN_SRC emacs-lisp
-(package-install 'marginalia)
-(marginalia-mode t)
-# +END_SRC
+#+BEGIN_SRC emacs-lisp
+  (package-install 'marginalia)
+  (marginalia-mode t)
+#+END_SRC
 
 **** use-package 管理
 
-# +BEGIN_SRC emacs-lisp
-;; Enable rich annotations using the Marginalia package
-(use-package marginalia
-  ;; Either bind `marginalia-cycle' globally or only in the minibuffer
-  :bind (("M-A" . marginalia-cycle)
-         :map minibuffer-local-map
-         ("M-A" . marginalia-cycle))
+#+BEGIN_SRC emacs-lisp
+  ;; Enable rich annotations using the Marginalia package
+  (use-package marginalia
+    ;; Either bind `marginalia-cycle' globally or only in the minibuffer
+    :bind (("M-A" . marginalia-cycle)
+	   :map minibuffer-local-map
+	   ("M-A" . marginalia-cycle))
 
-  ;; The :init configuration is always executed (Not lazy!)
-  :init
+    ;; The :init configuration is always executed (Not lazy!)
+    :init
 
-  ;; Must be in the :init section of use-package such that the mode gets
-  ;; enabled right away. Note that this forces loading the package.
-  (marginalia-mode))
-# +END_SRC
+    ;; Must be in the :init section of use-package such that the mode gets
+    ;; enabled right away. Note that this forces loading the package.
+    (marginalia-mode))
+#+END_SRC
 
 
 ** embark
@@ -165,42 +166,42 @@ Emacs 提示 输入快捷键的插件
 *** HOW
 **** 普通使用
 
-# +BEGIN_SRC emacs-lisp
-(package-install 'embark)
-(global-set-key (kbd "C-;") 'embark-act)
-(setq prefix-help-command 'embark-prefix-help-command)
-# +END_SRC
+#+BEGIN_SRC emacs-lisp
+  (package-install 'embark)
+  (global-set-key (kbd "C-;") 'embark-act)
+  (setq prefix-help-command 'embark-prefix-help-command)
+#+END_SRC
 
 **** use-package 管理
 
-# +BEGIN_SRC emacs-lisp
-(use-package embark
-  :ensure t
+#+BEGIN_SRC emacs-lisp
+  (use-package embark
+    :ensure t
 
-  :bind
-  (("C-." . embark-act)         ;; pick some comfortable binding
-   ("C-;" . embark-dwim)        ;; good alternative: M-.
-   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+    :bind
+    (("C-." . embark-act)         ;; pick some comfortable binding
+     ("C-;" . embark-dwim)        ;; good alternative: M-.
+     ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
 
-  :init
+    :init
 
-  ;; Optionally replace the key help with a completing-read interface
-  (setq prefix-help-command #'embark-prefix-help-command)
+    ;; Optionally replace the key help with a completing-read interface
+    (setq prefix-help-command #'embark-prefix-help-command)
 
-  :config
+    :config
 
-  ;; Hide the mode line of the Embark live/completions buffers
-  (add-to-list 'display-buffer-alist
-               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                 nil
-                 (window-parameters (mode-line-format . none)))))
+    ;; Hide the mode line of the Embark live/completions buffers
+    (add-to-list 'display-buffer-alist
+		 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+		   nil
+		   (window-parameters (mode-line-format . none)))))
 
-;; Consult users will also want the embark-consult package.
-(use-package embark-consult
-  :ensure t ; only need to install it, embark loads it after consult if found
-  :hook
-  (embark-collect-mode . consult-preview-at-point-mode))
-# +END_SRC
+  ;; Consult users will also want the embark-consult package.
+  (use-package embark-consult
+    :ensure t ; only need to install it, embark loads it after consult if found
+    :hook
+    (embark-collect-mode . consult-preview-at-point-mode))
+#+END_SRC
 
 
 ** consult
@@ -212,128 +213,128 @@ swiper 替代者
 *** HOW
 **** 普通使用
 
-# +BEGIN_SRC emacs-lisp
-(package-install 'consult)
-;;replace swiper
-(global-set-key (kbd "C-s") 'consult-line)
-;;consult-imenu
-# +END_SRC
+#+BEGIN_SRC emacs-lisp
+  (package-install 'consult)
+  ;;replace swiper
+  (global-set-key (kbd "C-s") 'consult-line)
+  ;;consult-imenu
+#+END_SRC
 
 **** use-package 管理
 
-# +BEGIN_SRC emacs-lisp
-;; Example configuration for Consult
-(use-package consult
-  ;; Replace bindings. Lazily loaded due by `use-package'.
-  :bind (;; C-c bindings (mode-specific-map)
-         ("C-c h" . consult-history)
-         ("C-c m" . consult-mode-command)
-         ("C-c k" . consult-kmacro)
-         ;; C-x bindings (ctl-x-map)
-         ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
-         ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
-         ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
-         ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
-         ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
-         ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
-         ;; Custom M-# bindings for fast register access
-         ("M-#" . consult-register-load)
-         ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
-         ("C-M-#" . consult-register)
-         ;; Other custom bindings
-         ("M-y" . consult-yank-pop)                ;; orig. yank-pop
-         ;; M-g bindings (goto-map)
-         ("M-g e" . consult-compile-error)
-         ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
-         ("M-g g" . consult-goto-line)             ;; orig. goto-line
-         ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
-         ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
-         ("M-g m" . consult-mark)
-         ("M-g k" . consult-global-mark)
-         ("M-g i" . consult-imenu)
-         ("M-g I" . consult-imenu-multi)
-         ;; M-s bindings (search-map)
-         ("M-s d" . consult-find)
-         ("M-s D" . consult-locate)
-         ("M-s g" . consult-grep)
-         ("M-s G" . consult-git-grep)
-         ("M-s r" . consult-ripgrep)
-         ("M-s l" . consult-line)
-         ("M-s L" . consult-line-multi)
-         ("M-s k" . consult-keep-lines)
-         ("M-s u" . consult-focus-lines)
-         ;; Isearch integration
-         ("M-s e" . consult-isearch-history)
-         :map isearch-mode-map
-         ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
-         ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
-         ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
-         ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
-         ;; Minibuffer history
-         :map minibuffer-local-map
-         ("M-s" . consult-history)                 ;; orig. next-matching-history-element
-         ("M-r" . consult-history))                ;; orig. previous-matching-history-element
+#+BEGIN_SRC emacs-lisp
+  ;; Example configuration for Consult
+  (use-package consult
+    ;; Replace bindings. Lazily loaded due by `use-package'.
+    :bind (;; C-c bindings (mode-specific-map)
+	   ("C-c h" . consult-history)
+	   ("C-c m" . consult-mode-command)
+	   ("C-c k" . consult-kmacro)
+	   ;; C-x bindings (ctl-x-map)
+	   ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
+	   ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+	   ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+	   ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+	   ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
+	   ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+	   ;; Custom M-# bindings for fast register access
+	   ("M-#" . consult-register-load)
+	   ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+	   ("C-M-#" . consult-register)
+	   ;; Other custom bindings
+	   ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+	   ;; M-g bindings (goto-map)
+	   ("M-g e" . consult-compile-error)
+	   ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
+	   ("M-g g" . consult-goto-line)             ;; orig. goto-line
+	   ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
+	   ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+	   ("M-g m" . consult-mark)
+	   ("M-g k" . consult-global-mark)
+	   ("M-g i" . consult-imenu)
+	   ("M-g I" . consult-imenu-multi)
+	   ;; M-s bindings (search-map)
+	   ("M-s d" . consult-find)
+	   ("M-s D" . consult-locate)
+	   ("M-s g" . consult-grep)
+	   ("M-s G" . consult-git-grep)
+	   ("M-s r" . consult-ripgrep)
+	   ("M-s l" . consult-line)
+	   ("M-s L" . consult-line-multi)
+	   ("M-s k" . consult-keep-lines)
+	   ("M-s u" . consult-focus-lines)
+	   ;; Isearch integration
+	   ("M-s e" . consult-isearch-history)
+	   :map isearch-mode-map
+	   ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
+	   ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
+	   ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
+	   ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
+	   ;; Minibuffer history
+	   :map minibuffer-local-map
+	   ("M-s" . consult-history)                 ;; orig. next-matching-history-element
+	   ("M-r" . consult-history))                ;; orig. previous-matching-history-element
 
-  ;; Enable automatic preview at point in the *Completions* buffer. This is
-  ;; relevant when you use the default completion UI.
-  :hook (completion-list-mode . consult-preview-at-point-mode)
+    ;; Enable automatic preview at point in the *Completions* buffer. This is
+    ;; relevant when you use the default completion UI.
+    :hook (completion-list-mode . consult-preview-at-point-mode)
 
-  ;; The :init configuration is always executed (Not lazy)
-  :init
+    ;; The :init configuration is always executed (Not lazy)
+    :init
 
-  ;; Optionally configure the register formatting. This improves the register
-  ;; preview for `consult-register', `consult-register-load',
-  ;; `consult-register-store' and the Emacs built-ins.
-  (setq register-preview-delay 0.5
-        register-preview-function #'consult-register-format)
+    ;; Optionally configure the register formatting. This improves the register
+    ;; preview for `consult-register', `consult-register-load',
+    ;; `consult-register-store' and the Emacs built-ins.
+    (setq register-preview-delay 0.5
+	  register-preview-function #'consult-register-format)
 
-  ;; Optionally tweak the register preview window.
-  ;; This adds thin lines, sorting and hides the mode line of the window.
-  (advice-add #'register-preview :override #'consult-register-window)
+    ;; Optionally tweak the register preview window.
+    ;; This adds thin lines, sorting and hides the mode line of the window.
+    (advice-add #'register-preview :override #'consult-register-window)
 
-  ;; Use Consult to select xref locations with preview
-  (setq xref-show-xrefs-function #'consult-xref
-        xref-show-definitions-function #'consult-xref)
+    ;; Use Consult to select xref locations with preview
+    (setq xref-show-xrefs-function #'consult-xref
+	  xref-show-definitions-function #'consult-xref)
 
-  ;; Configure other variables and modes in the :config section,
-  ;; after lazily loading the package.
-  :config
+    ;; Configure other variables and modes in the :config section,
+    ;; after lazily loading the package.
+    :config
 
-  ;; Optionally configure preview. The default value
-  ;; is 'any, such that any key triggers the preview.
-  ;; (setq consult-preview-key 'any)
-  ;; (setq consult-preview-key (kbd "M-."))
-  ;; (setq consult-preview-key (list (kbd "<S-down>") (kbd "<S-up>")))
-  ;; For some commands and buffer sources it is useful to configure the
-  ;; :preview-key on a per-command basis using the `consult-customize' macro.
-  (consult-customize
-   consult-theme :preview-key '(:debounce 0.2 any)
-   consult-ripgrep consult-git-grep consult-grep
-   consult-bookmark consult-recent-file consult-xref
-   consult--source-bookmark consult--source-file-register
-   consult--source-recent-file consult--source-project-recent-file
-   ;; :preview-key (kbd "M-.")
-   :preview-key '(:debounce 0.4 any))
+    ;; Optionally configure preview. The default value
+    ;; is 'any, such that any key triggers the preview.
+    ;; (setq consult-preview-key 'any)
+    ;; (setq consult-preview-key (kbd "M-."))
+    ;; (setq consult-preview-key (list (kbd "<S-down>") (kbd "<S-up>")))
+    ;; For some commands and buffer sources it is useful to configure the
+    ;; :preview-key on a per-command basis using the `consult-customize' macro.
+    (consult-customize
+     consult-theme :preview-key '(:debounce 0.2 any)
+     consult-ripgrep consult-git-grep consult-grep
+     consult-bookmark consult-recent-file consult-xref
+     consult--source-bookmark consult--source-file-register
+     consult--source-recent-file consult--source-project-recent-file
+     ;; :preview-key (kbd "M-.")
+     :preview-key '(:debounce 0.4 any))
 
-  ;; Optionally configure the narrowing key.
-  ;; Both < and C-+ work reasonably well.
-  (setq consult-narrow-key "<") ;; (kbd "C-+")
+    ;; Optionally configure the narrowing key.
+    ;; Both < and C-+ work reasonably well.
+    (setq consult-narrow-key "<") ;; (kbd "C-+")
 
-  ;; Optionally make narrowing help available in the minibuffer.
-  ;; You may want to use `embark-prefix-help-command' or which-key instead.
-  ;; (define-key consult-narrow-map (vconcat consult-narrow-key "?") #'consult-narrow-help)
+    ;; Optionally make narrowing help available in the minibuffer.
+    ;; You may want to use `embark-prefix-help-command' or which-key instead.
+    ;; (define-key consult-narrow-map (vconcat consult-narrow-key "?") #'consult-narrow-help)
 
-  ;; By default `consult-project-function' uses `project-root' from project.el.
-  ;; Optionally configure a different project root function.
-  ;; There are multiple reasonable alternatives to chose from.
-  ;;;; 1. project.el (the default)
-  ;; (setq consult-project-function #'consult--default-project--function)
-  ;;;; 2. projectile.el (projectile-project-root)
-  ;; (autoload 'projectile-project-root "projectile")
-  ;; (setq consult-project-function (lambda (_) (projectile-project-root)))
-  ;;;; 3. vc.el (vc-root-dir)
-  ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
-  ;;;; 4. locate-dominating-file
-  ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
-)
-# +END_SRC
+    ;; By default `consult-project-function' uses `project-root' from project.el.
+    ;; Optionally configure a different project root function.
+    ;; There are multiple reasonable alternatives to chose from.
+    ;;;; 1. project.el (the default)
+    ;; (setq consult-project-function #'consult--default-project--function)
+    ;;;; 2. projectile.el (projectile-project-root)
+    ;; (autoload 'projectile-project-root "projectile")
+    ;; (setq consult-project-function (lambda (_) (projectile-project-root)))
+    ;;;; 3. vc.el (vc-root-dir)
+    ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
+    ;;;; 4. locate-dominating-file
+    ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
+  )
+#+END_SRC
