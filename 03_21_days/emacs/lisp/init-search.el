@@ -116,6 +116,7 @@ Supports exporting consult-grep to wgrep, file to wdeired, and consult-location 
 ;; (setq consult-locate-args (encode-coding-string "es.exe -i -p -r" 'gbk))
 ;; (add-to-list 'process-coding-system-alist '("es" gbk . gbk)))
 
+;; sudo dnf install ripgrep first
 (use-package consult
   ;; :ensure t
   :bind
