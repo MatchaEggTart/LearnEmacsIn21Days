@@ -9,9 +9,9 @@
   :config
   (progn
     ;; 关闭启动界面
-    (setq inhibit-startup-screen t)
+    ;; (setq inhibit-startup-screen t)
     ;; 自动最大化
-    (toggle-frame-maximized)
+    ;; (toggle-frame-maximized)
     ;; 菜单栏关闭
     (menu-bar-mode 0)
     ;; 工具栏关闭
@@ -28,6 +28,27 @@
     (setq-default cursor-type 'bar)
     )
   )
+
+(use-package projectile
+  :config
+  (projectile-mode +1)  
+  )
+
+;; 启动
+(use-package dashboard
+  ;; :ensure t
+  :init
+  (dashboard-setup-startup-hook)
+  :config
+  ;; (setq dashboard-banner-logo-title "Welcome to Emacs!") ;; 个性签名，随读者喜好设置
+  (setq dashboard-center-content t)
+  (setq dashboard-projects-backend 'projectile) ;; 读者可以暂时注释掉这一行，等安装了 projectile 后再使用
+  (setq dashboard-startup-banner 'official) ;; 也可以自定义图片
+  (setq dashboard-items '((recents  . 5)   ;; 显示多少个最近文件
+			  ;; (bookmarks . 5)  ;; 显示多少个最近书签
+			  (projects . 10))) ;; 显示多少个最近项目
+  )
+
 
 ;; 安装主题
 (use-package modus-themes
