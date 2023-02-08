@@ -1,0 +1,80 @@
+* 简介
+
+
+** Lisp
+
+*** WHAT
+
+约翰麦卡锡和他的学生于 1958 年展开 Lisp 的初次实现工作。 Lisp 是继 FORTRAN 之后，仍在使用的最古老的程序语言
+
+#+begin_quote
+它被设计成能够自己进化。你能用 Lisp 定义新的 Lisp 操作符，当 面向对象编程 时，Lisp 很容易实现
+#+end_quote
+
+
+** 新的工具
+
+*** WHAT
+
+跟大部分编程语言一样，能写函数
+
+**** Lisp 闭包
+
+Lisp
+
+#+begin_src lisp
+  (defun sum (n)
+    (let ((s 0))
+      (dotimes (i n s)
+	(incf s i))))
+#+end_src
+
+C
+
+#+begin_src C
+  int sum(int n) {
+    int i, s = 0;
+    for (i = 0; i < n; i++)
+      s += i;
+    return(s);
+  }
+#+end_src
+
+假设你想写一个函数，输入一个数 n ，返回把 n 与传入参数 (argument)相加的函数
+
+Lisp
+
+#+begin_src lisp
+  ; Lisp
+  (defun addn (n)
+    #'(lambda (x)
+	(+ x n)))
+#+end_src
+
+这里有 闭包[Lexical Closure]
+
+**** Lisp 还有 宏
+
+闭包仅是其中一个我们在别的语言找不到的抽象概念之一。另一个更有价值的 Lisp 特点是， Lisp 程序是用 Lisp 的数据结构来表示。
+这表示你可以写出会写程序的程序。人们真的需要这个吗？
+没错 ── 它们叫做宏，有经验的程序员也一直在使用它。学到 173 页你就可以自己写出自己的宏了
+
+
+** 新的技术
+
+*** WHAT
+
+Lisp 赋予你别的语言所没有的工具。
+不仅仅如此，就 Lisp 带来的新特性来说 ──
+自动内存管理 (automatic memory management)，显式类型 (manifest typing)，闭包 (closures)等 
+
+Lisp 被设计成可扩展的：让你定义自己的操作符。这是可能的，因为 Lisp 是由和你程序一样的函数与宏所构成的。
+所以扩展 Lisp 就和写一个 Lisp 程序一样简单。事实上，它是如此的容易（和有用），以至于扩展语言自身成了标准实践。
+
+
+
+** 新的方法
+
+*** WHAT
+随着开发环境变得更强大，程序语言变得更抽象， Lisp 的编程风格正逐渐取代旧的规划-然后-实现 (plan-and-implement)的模式
+
