@@ -31,6 +31,23 @@
 	      ("C-n" . 'company-select-next)
 	      ("C-p" . 'company-select-previous)))
 
+;; Web-mode
+(use-package web-mode
+  ;; :ensure t
+  :init
+  (progn
+    ;; 将文件归类到 Web 这个 major mode
+    (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.s?css\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.tsx?\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.jsx?\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.xml\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.info\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.module\\'" . web-mode))
+    ;; 缩进
+    (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-css-indent-offset 2)
+    (setq web-mode-code-indent-offset 2)))
 
 (provide 'init-develop)
 
