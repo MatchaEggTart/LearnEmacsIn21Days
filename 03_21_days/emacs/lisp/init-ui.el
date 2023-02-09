@@ -28,6 +28,10 @@
     (setq-default cursor-type 'bar)
     )
   )
+;; Setting English Font
+(set-face-attribute 'default nil :font (font-spec :family "Source Code Pro" :size 14))
+;; Setting Chinese Font
+(set-fontset-font t 'han (font-spec :family "霞鹜文楷" :weight 'bold))
 
 (use-package projectile
   :config

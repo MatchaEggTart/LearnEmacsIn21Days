@@ -1,0 +1,41 @@
+* sbcl
+
+** 安装编译器
+
+#+begin_src shell
+  sudo dnf install sbcl
+#+end_src
+
+
+* [[https://github.com/slime/slime][slime]]
+
+** 配置
+
+#+begin_src emacs-lisp
+  (use-package slime
+    :defer t
+    :config
+    (progn
+      ;; (use-package ac-slime :ensure t)
+      (setq tab-width 2)
+      (setq inferior-lisp-program "sbcl")
+      ;; (slime-setup)
+      ;; (add-hook 'slime-mode-hook 'set-up-slime-ac)
+      ;; (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+      ;; (add-hook 'slime-mode-hook
+		;; (lambda ()
+		  ;; (unless (slime-connected-p)
+		    ;; (save-excursion (slime)))))
+      ;; (slime-setup '(slime-fancy slime-asdf))
+      ;; (slime-setup '(slime-repl slime-fancy slime-banner))
+      ;; (setq slime-protocol-version 'ignore
+	    ;; slime-net-coding-system 'utf-8-unix
+	    ;; slime-complete-symbol*-fancy t
+	    ;; slime-complete-symbol-function 'slime-fuzzy-complete-symbol)))
+      ))
+#+end_src
+
+** 安装 [[https://github.com/roswell/roswell][roswell]]
+因为 emacs 28 有点问题
+
+
