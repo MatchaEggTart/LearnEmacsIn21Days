@@ -31,6 +31,13 @@
 	      ("C-n" . 'company-select-next)
 	      ("C-p" . 'company-select-previous)))
 
+;; for org-bars
+(use-package company-posframe
+  :config
+  (company-posframe-mode 1)
+  ;; (setq company-tooltip-minimum-width 40)
+  )
+  
 ;; Web-mode
 (use-package web-mode
   ;; :ensure t

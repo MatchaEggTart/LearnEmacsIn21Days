@@ -511,7 +511,7 @@ format 的第一个实参 t ，表示输出被送到缺省的地方去
 下面这个函数，提示使用者输入，并返回任何输入的东西：
 
 #+begin_src lisp
-  (defun askem (string)
+  (defun askme (string)
    (format t "~A" string)
    (read))
 #+end_src
@@ -519,7 +519,7 @@ format 的第一个实参 t ，表示输出被送到缺省的地方去
 它的行为如下：
 
 #+begin_src lisp
-  > (askem "How old are you?")
+  > (askme "How old are you?")
   How old are you?29
 
   29

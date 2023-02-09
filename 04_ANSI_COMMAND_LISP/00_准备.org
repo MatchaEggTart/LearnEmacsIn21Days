@@ -13,29 +13,39 @@
 
 #+begin_src emacs-lisp
   (use-package slime
-    :defer t
     :config
     (progn
-      ;; (use-package ac-slime :ensure t)
-      (setq tab-width 2)
       (setq inferior-lisp-program "sbcl")
-      ;; (slime-setup)
-      ;; (add-hook 'slime-mode-hook 'set-up-slime-ac)
-      ;; (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
-      ;; (add-hook 'slime-mode-hook
-		;; (lambda ()
-		  ;; (unless (slime-connected-p)
-		    ;; (save-excursion (slime)))))
-      ;; (slime-setup '(slime-fancy slime-asdf))
-      ;; (slime-setup '(slime-repl slime-fancy slime-banner))
-      ;; (setq slime-protocol-version 'ignore
-	    ;; slime-net-coding-system 'utf-8-unix
-	    ;; slime-complete-symbol*-fancy t
-	    ;; slime-complete-symbol-function 'slime-fuzzy-complete-symbol)))
-      ))
+      (setq tab-width 2)
+      (slime-setup '(slime-repl slime-fancy slime-banner)
+		   ;; (setq slime-contribs '(slime-fancy slime-cl-indent))
+		   )))
+
+  (provide 'init-lisp)
 #+end_src
 
 ** 安装 [[https://github.com/roswell/roswell][roswell]]
-因为 emacs 28 有点问题
 
+好像不用装
+
+
+* 如何在 sbcl 和 slime 多行输入
+
+** HOW
+
+关键是 Ctrl + J
+
+
+* 如何退出 sbcl
+
+** HOW
+
+输入 (quit)，带括号
+
+
+* 退出 slime
+
+** HOW
+
+输入 “,”，然后 sayoonana
 

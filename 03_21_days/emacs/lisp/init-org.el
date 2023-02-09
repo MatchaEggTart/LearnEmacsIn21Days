@@ -63,6 +63,10 @@
 			`(lambda (c)
 			   (if (char-equal c ?\<) t (,electric-pair-inhibit-predicate c))))))
 
+;; org-bars
+(require 'org-bars)
+(add-hook 'org-mode-hook #'org-bars-mode)
+
 
 (provide 'init-org)
 ;; init-org.el ends here
