@@ -40,7 +40,7 @@
 
 ** HOW
 
-输入 (quit)，带括号
+输入 (quit) 或者 (exit)，带括号
 
 
 * 退出 slime
@@ -49,3 +49,41 @@
 
 输入 “,”，然后 sayoonana
 
+
+* 重置函数、变量
+
+** HOW
+
+slime
+
+#+begin_src emacs-lisp
+M-x slime-restart-inferior-lisp
+#+end_src
+
+
+* 函数使用
+
+** HOW
+
+*** 定义
+
+#+begin_src lisp
+  (defun 函数名称 (型参...))
+#+end_src
+
+型参只需要用空格分隔，不需要逗号
+
+*** 使用
+
+#+begin_src lisp
+  (函数 实参)
+#+end_src
+
+函数外要有括号，是求指的意思，参数不需要括号括起来
+
+
+* 清屏
+
+** HOW
+
+C-c M-o 或 M-x slime-repl-clear-buffer
