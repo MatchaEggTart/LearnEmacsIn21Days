@@ -30,6 +30,10 @@
   (setq web-mode-enable-current-element-highlight t)
   )
 
+;; html 快捷键，使用 C+j
+(use-package emmet-mode
+  :hook ((web-mode css-mode) . emmet-mode))
+
 (provide 'init-web)
 
 ;;; init-web.el ends here
