@@ -35,6 +35,7 @@
 
 
 ;; 快速切换窗格
+;; M-x emacs-lisp-native-compile-and-load
 (use-package ace-window
   :bind (("M-o" . 'ace-window)))
 
