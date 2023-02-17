@@ -31,6 +31,11 @@
   ;; (setq company-tooltip-minimum-width 40)
   )
 
+;; 高亮括号
+(use-package highlight-parentheses
+  :hook (prog-mode . highlight-parentheses-mode))
+
+
 (provide 'init-develop)
 
 ;;; init-develop.el ends here
