@@ -4,19 +4,12 @@
 
 ;; -*- lexical-binding: t -*-
 
-;; Settings for exec-path-from-shell
-;; fix the PATH environment variable issue
-(use-package exec-path-from-shell
-  :defer nil
-  :when (or (memq window-system '(mac ns x))
-            (unless (memq system-type '(windows-nt dos))
-              (daemonp)))
-  :init (exec-path-from-shell-initialize))
-
-;; (use-package vterm
-;; :ensure t
-;; :confit (display-line-numbers-mode nil))
-;;  )
+;; editorconfig
+(use-package editorconfig
+	;; :ensure t
+	:config
+	;; Enable editorconfig-mode (EditorConfig homepage: https://editorconfig.org/)
+	(editorconfig-mode t))
 
 ;; 自动补全(新)
 (use-package company
@@ -37,24 +30,6 @@
   (company-posframe-mode 1)
   ;; (setq company-tooltip-minimum-width 40)
   )
-  
-;; Web-mode
-(use-package web-mode
-  ;; :ensure t
-  :init
-  (progn
-    ;; 将文件归类到 Web 这个 major mode
-    (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.s?css\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.tsx?\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.jsx?\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.xml\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.info\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.module\\'" . web-mode))
-    ;; 缩进
-    (setq web-mode-markup-indent-offset 2)
-    (setq web-mode-css-indent-offset 2)
-    (setq web-mode-code-indent-offset 2)))
 
 (provide 'init-develop)
 

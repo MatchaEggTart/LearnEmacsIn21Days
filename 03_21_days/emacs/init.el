@@ -21,6 +21,9 @@
 (require 'init-edit)
 (require 'init-search)
 (require 'init-develop)
+(require 'init-web)
+(require 'init-eglot)
+(require 'init-shell)
 (require 'init-org)
 
 ;; (require 'init-awesome-tab)
