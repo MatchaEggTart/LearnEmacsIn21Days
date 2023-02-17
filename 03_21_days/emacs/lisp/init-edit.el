@@ -7,6 +7,9 @@
 ;; 括号补全
 (electric-pair-mode 1)
 
+;; 是否自动缩进
+(electric-indent-mode nil)
+
 ;; 选中内容可以直接被输入内容取代
 (delete-selection-mode t)
 
