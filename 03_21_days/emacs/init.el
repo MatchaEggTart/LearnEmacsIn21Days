@@ -13,19 +13,18 @@
 ;; (dolist (folder (directory-files (concat user-emacs-directory "lisp") t directory-files-no-dot-files-regexp))
 ;;  (add-to-list 'load-path folder))
 
+(require 'init-basic)
 (require 'init-elpa)
 (require 'init-system)
-(require 'init-basic)
 (require 'init-keybindings)
 (require 'init-ui)
 (require 'init-edit)
 (require 'init-search)
+(require 'init-shell)
+(require 'init-org)
 (require 'init-develop)
 (require 'init-web)
 (require 'init-eglot)
-(require 'init-shell)
-(require 'init-org)
-
 ;; (require 'init-awesome-tab)
 
 
