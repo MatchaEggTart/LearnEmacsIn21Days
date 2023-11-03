@@ -1,11 +1,107 @@
 * 第三天
 
+
+** Major Mode 和 Minor Mode
+
+
+*** Major Mode
+
+**** WHAT
+有且只有一个
+Major Mode 通常是定义对于一种文件类型编辑的核心规则，例如语法高亮、缩进、快捷键绑定等
+
+
+*** Minor Mode
+
+**** WHAT
+有且可有多个
+而 Minor Mode 是除去 Major Mode 所提供的核心功能以外的额外编辑功能（辅助功能）
+
+
+*** 查看 Mode 命令
+
+**** HOW
+
+C-h m
+
+
+** Elisp
+
+*** WHAT
+这是一门函数式语言
+
+
+*** 定义变量
+
+**** HOW
+
+#+BEGIN_SRC emacs-lisp
+(setq 变量名 值)
+#+END_SRC
+
+
+*** 定义函数
+
+**** HOW
+
+#+BEGIN_SRC emacs-lisp
+  (defun 函数名 ()
+    (指令1)
+    (指令2)
+    (...))
+#+END_SRC
+
+
+*** 定义可调用函数
+
+**** WHAT
+可以调用的函数
+使用 interactive
+只要想要 '函数 那样使用，就必须加 interactive
+
+**** HOW
+
+#+BEGIN_SRC emacs-lisp
+  (defun 函数名 ()
+    (interactive)
+    (指令))
+#+END_SRC
+
+**** EXAMPLE
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "按键") '函数)
+#+END_SRC
+
+
+*** 执行函数
+
+**** HOW
+
+#+BEGIN_SRC emacs-lisp
+  (函数名)
+#+END_SRC
+
+**** EXAMPLE
+
+#+BEGIN_SRC emacs-lisp
+  (defun open-my-config ()
+    (interactive)
+    (dired "~/.config/emacs/lisp/"))
+
+  (global-set-key (kbd "<f6>") 'open-my-config)
+#+END_SRC
+
+ 
 ** 设置
+
 
 *** 补全(暂时使用而已)
 
 #+BEGIN_SRC emacs-lisp
+  ;; 系统自带的提示功能
   (setq tab-always-indent 'complete)
+  ;; M-x 有补全
   (icomplete-mode t)
 #+END_SRC
 
@@ -15,6 +111,14 @@
 #+BEGIN_SRC emacs-lisp
   ;; 括号补全
   (electric-pair-mode t)
+#+END_SRC
+
+
+*** 关闭启动界面
+
+#+BEGIN_SRC emacs-lisp
+  ;; 关闭启动界面
+  (setq inhibit-startup-screen t)
 #+END_SRC
 
 
@@ -32,12 +136,29 @@
   ;; 关闭工具栏，tool-bar-mode 即为一个 Minor Mode
   (tool-bar-mode -1)
 
+  ;; 关闭 menu-bar
+  (menu-bar-mode 0)
+
   ;; 关闭文件滑动控件
   (scroll-bar-mode -1)
 
   ;; 显示行号
-  (global-linum-mode 1)
+  (global-display-line-numbers-mode t)
 #+END_SRC
+
+
+*** 改变光标模式
+
+#+BEGIN_SRC emacs-lisp
+  ;; 改变光标模式
+  ;; (setq cursor-type 'box)
+  (setq cursor-type 'bar)
+#+END_SRC
+
+
+*** 查看快捷键按钮
+
+C-x C-h
 
 
 *** 快速打开配置文件
@@ -52,6 +173,20 @@
   ;; 将 open-init-file 绑定在 F5键  
   (global-set-key (kbd "<f5>") 'open-init-file)
 #+END_SRC
+
+
+*** 设置快捷键查看函数
+
+#+BEGIN_SRC emacs-lisp
+  ;; 快捷键查找函数
+  (global-set-key (kbd "C-h C-f") 'find-function)
+#+END_SRC
+
+
+*** 执行当前缓冲区所有 Lisp 命令
+
+M-x eval-buffer
+
 
 *** 设置字体(好像没用)
 
@@ -88,6 +223,7 @@
 
 ** 学习 Elisp
 
+
 *** Elisp 简单例子
 
 #+BEGIN_SRC emacs-lisp
@@ -119,6 +255,7 @@
 
 
 ** 一丢丢 Org 知识
+
 
 *** TODO
 

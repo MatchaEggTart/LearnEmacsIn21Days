@@ -7,7 +7,10 @@
 *** 开启行号
 
 #+BEGIN_SRC emacs-lisp
+  ;; Version 28
   (global-linum-mode 1)
+  ;; Version 29
+  (global-display-line-numbers-mode t)
 #+END_SRC
 
 

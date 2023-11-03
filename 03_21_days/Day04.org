@@ -40,6 +40,7 @@
 
 *** HOW
 #+BEGIN_SRC emacs-lisp
+  ;; Version 28
   (require 'package)
   (setq package-archives '(("gnu"   . "http://elpa.zilongshanren.com/gnu/")
 			   ("melpa" . "http://elpa.zilongshanren.com/melpa/")))
@@ -48,6 +49,41 @@
   ;;防止反复调用 package-refresh-contents 会影响加载速度
   (when (not package-archive-contents)
     (package-refresh-contents))
+
+  ;; Version 29
+  ;; 配置源
+  ;; (message package-archives)
+  (use-package package
+    :config
+    (add-to-list 'package-archives '("melpa"         . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/"))
+    (add-to-list 'package-archives '("melpa-stable"  . "http://mirrors.tuna.tsinghua.edu.cn/elpa/stable-melpa/"))
+    (add-to-list 'package-archives '("gnu"           . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/"))
+    (add-to-list 'package-archives '("gnu-devel"     . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu-devel/"))
+    (add-to-list 'package-archives '("nongnu"        . "http://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/"))
+    (add-to-list 'package-archives '("nongnu-devel"  . "http://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu-devel/"))
+    (add-to-list 'package-archives '("org"           . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/"))
+    (unless (bound-and-true-p package--initialized)
+      (package-initialize))
+    (progn
+      ;; 不检查签名，国内镜像如果正在同步，会导致安装签名失败
+      (setq package-check-signature nil
+	    load-prefer-newer t)
+      ;; 防止反复调用 package-refresh-contents 会影响加载速度
+      (when (not package-archive-contents)
+	(package-refresh-contents)))
+    )
+
+  ;; 配置 use-package 默认设置
+  (require 'use-package-ensure)
+  (setq use-package-always-ensure t
+	use-package-always-defer t
+	use-package-always-demand nil
+	use-package-expand-minimally t
+	use-package-verbose t)
+
+  ;; 默认使用 melpa-stable
+  (setq use-package-always-pin "melpa-stable")
+
 #+END_SRC
 
 
@@ -62,6 +98,14 @@ Emacs 提示 输入快捷键的插件
   ;; modeline上显示我的所有的按键和执行的命令
   (package-install 'keycast)
   (keycast-mode t)
+
+  ;; user-package 用法
+  (use-package keycast
+    :ensure t
+    :hook
+    (after-init . keycast-mode)
+    )
+
 #+END_SRC
 
 
@@ -71,6 +115,7 @@ Emacs 提示 输入快捷键的插件
 增强 minibuffer 补全，比 ivy swiper 组合更快，M-x 会触发 vertico，orderless 可以让 vertico 模糊搜索
 
 *** HOW
+
 **** 普通使用
 
 #+BEGIN_SRC emacs-lisp
@@ -110,6 +155,7 @@ Emacs 提示 输入快捷键的插件
     :init
     (savehist-mode))
 
+  ;; 模糊搜索
   ;; Optionally use the `orderless' completion style.
   (use-package orderless
     :init
@@ -128,7 +174,8 @@ Emacs 提示 输入快捷键的插件
 
 *** WHAT
  
-增强 minibuffer 提示，minibufuffer 可以显示 文件大小权限，按键功能会有了提示
+增强 minibuffer 提示， 命令会有提示， minibufuffer 可以显示 文件大小权限， 按键功能会有了提示
+按 C-h v 可有查看变量的值
 
 *** HOW
 **** 普通使用
@@ -141,6 +188,7 @@ Emacs 提示 输入快捷键的插件
 **** use-package 管理
 
 #+BEGIN_SRC emacs-lisp
+  ;; 增强 minibuffer， 可以显示各种值跟其他数据
   ;; Enable rich annotations using the Marginalia package
   (use-package marginalia
     ;; Either bind `marginalia-cycle' globally or only in the minibuffer
@@ -175,6 +223,7 @@ Emacs 提示 输入快捷键的插件
 **** use-package 管理
 
 #+BEGIN_SRC emacs-lisp
+  ;; 在 函数 使用 C-. 可以看到函数的详细信息
   (use-package embark
     :ensure t
 
@@ -185,8 +234,14 @@ Emacs 提示 输入快捷键的插件
 
     :init
 
+    ;; 可以不用记快捷键， 按 C-x C-h， 然后输入快捷键大概内容
     ;; Optionally replace the key help with a completing-read interface
     (setq prefix-help-command #'embark-prefix-help-command)
+
+    ;; Show the Embark target at point via Eldoc.  You may adjust the Eldoc
+    ;; strategy, if you want to see the documentation from multiple providers.
+    (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
+    ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
 
     :config
 
@@ -223,6 +278,18 @@ swiper 替代者
 **** use-package 管理
 
 #+BEGIN_SRC emacs-lisp
+  ;; 建议版本
+  ;; C-s C-r 搜索增强
+  ;; sudo dnf install ripgrep || sudo pacman -S ripgrep
+  (use-package consult
+    ;; :ensure t
+    :bind
+    ("C-s" . consult-line)
+    ;; ("C-x b" . consult-buffer)
+    ("C-c p s" . consult-ripgrep)
+    )
+
+  ;; 官方例子
   ;; Example configuration for Consult
   (use-package consult
     ;; Replace bindings. Lazily loaded due by `use-package'.
@@ -327,14 +394,14 @@ swiper 替代者
     ;; By default `consult-project-function' uses `project-root' from project.el.
     ;; Optionally configure a different project root function.
     ;; There are multiple reasonable alternatives to chose from.
-    ;;;; 1. project.el (the default)
+      ;;;; 1. project.el (the default)
     ;; (setq consult-project-function #'consult--default-project--function)
-    ;;;; 2. projectile.el (projectile-project-root)
+      ;;;; 2. projectile.el (projectile-project-root)
     ;; (autoload 'projectile-project-root "projectile")
     ;; (setq consult-project-function (lambda (_) (projectile-project-root)))
-    ;;;; 3. vc.el (vc-root-dir)
+      ;;;; 3. vc.el (vc-root-dir)
     ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
-    ;;;; 4. locate-dominating-file
+      ;;;; 4. locate-dominating-file
     ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
-  )
+    )
 #+END_SRC
