@@ -1,11 +1,9 @@
 * 第九天
 
 
-** 配置
+** 保存光标历史，记住上个命令
 
-*** 保存光标历史，记住上个命令
-
-**** HOW
+*** HOW
 
 #+begin_src emacs-lisp
   ;; 记住指令跟文件，下次使用优先，不过 28好像默认开启了
@@ -28,9 +26,10 @@
     :hook (after-init . save-place-mode))
 #+end_src
 
-*** 显示文件行、列、大小 ，美化状态栏
 
-**** HOW
+** 显示文件行、列、大小 ，美化状态栏
+
+*** HOW
 
 #+begin_src emacs-lisp
   ;; mode-line 显示 文件大小
@@ -64,11 +63,11 @@
       "Show current command and its key binding in the mode line."
       :global t
       (if keycast-mode
-	  (progn
-	    (add-hook 'pre-command-hook 'keycast--update t)
-	    (add-to-list 'global-mode-string '("" keycast-mode-line " ")))
-	(remove-hook 'pre-command-hook 'keycast--update)
-	(setq global-mode-string (remove '("" keycast-mode-line " ") global-mode-string))))
+          (progn
+            (add-hook 'pre-command-hook 'keycast--update t)
+            (add-to-list 'global-mode-string '("" keycast-mode-line " ")))
+        (remove-hook 'pre-command-hook 'keycast--update)
+        (setq global-mode-string (remove '("" keycast-mode-line " ") global-mode-string))))
     :hook
     (after-init . keycast-mode)
     )

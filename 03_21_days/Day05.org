@@ -27,7 +27,6 @@ setq-default 对全局 buffer 的变量进行赋值
 
 ** 配置
 
-
 *** 括号前后提示
 
 #+BEGIN_SRC emacs-lisp
@@ -102,7 +101,7 @@ setq-default 对全局 buffer 的变量进行赋值
 
 #+BEGIN_SRC emacs-lisp
   ;; 选中内容可以直接被输入内容取代Q
-  (delete-selection-mode 1)
+  (delete-selection-mode t)
 #+END_SRC
 
 
@@ -111,8 +110,11 @@ setq-default 对全局 buffer 的变量进行赋值
 **** HOW
 
 #+BEGIN_SRC emacs-lisp
+  ;; 查找函数
   (global-set-key (kbd "C-h C-f") 'find-function)
+  ;; 查找变量
   (global-set-key (kbd "C-h C-v") 'find-variable)
+  ;; 查找按键
   (global-set-key (kbd "C-h C-k") 'find-function-on-key)
 #+END_SRC
 

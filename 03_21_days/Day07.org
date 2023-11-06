@@ -1,5 +1,6 @@
 * 第七天
 
+
 ** custom.el
 
 *** WHAT
@@ -14,6 +15,7 @@
   (load custom-file 'no-error 'no-message)
 #+END_SRC
 
+
 ** 模块化管理
 
 *** WHAT
@@ -22,12 +24,19 @@
 
 要学会 expand-file-name (concat user-emacs-directory "lisp") 拼接字符串做路径
 
+
+** org-mode 执行代码
+
+*** HOW
+
+在代码块 输入 C-c ' 会出现一个 buffer 让你输入内容
+
+
 ** org-tempo
 
 *** WHAT
 
 在 org-mode，输入 <s TAB 会自动出现 代码块
-在代码块 输入 C-c ' 会出现一个 buffer 让你输入内容
 
 *** HOW
 
@@ -35,6 +44,7 @@
   ;; 快捷键 <s TAB 创建代码块
   (require 'org-tempo) ; 开启 easy template
 #+end_src
+
 
 ** org 来管理配置文件
 
@@ -64,21 +74,37 @@
   (org-babel-load-file (expand-file-name "config.org" user-emacs-directory))
 #+end_src
 
-** 配置
 
-*** org-mode 取消 尖括号补全
+** org-mode 取消 尖括号补全
 
-**** HOW
+*** HOW
 
 #+begin_src emacs-lisp
-;; 禁用左尖括号
-(setq electric-pair-inhibit-predicate
-      `(lambda (c)
-	 (if (char-equal c ?\<) t (,electric-pair-inhibit-predicate c))))
 
-(add-hook 'org-mode-hook
-	  (lambda ()
-	    (setq-local electric-pair-inhibit-predicate
-			`(lambda (c)
-			   (if (char-equal c ?\<) t (,electric-pair-inhibit-predicate c))))))
+  ;; 旧版
+  ;; 禁用左尖括号
+  (setq electric-pair-inhibit-predicate
+        `(lambda (c)
+           (if (char-equal c ?\<) t (,electric-pair-inhibit-predicate c))))
+
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (setq-local electric-pair-inhibit-predicate
+                          `(lambda (c)
+                             (if (char-equal c ?\<) t (,electric-pair-inhibit-predicate c))))))
+
+  ;; 新版
+  (use-package org
+    :init
+    (add-hook 'org-mode-hook
+              (defun init-org-mode ()
+                ;; 禁用左尖括号补全，org 模式必须
+                (setq-local electric-pair-inhibit-predicate
+                            `(lambda (c) (if (char-equal c ?<) t
+                                           (,electric-pair-inhibit-predicate c))))
+                )
+              )
+    ;; 省略
+    )
+  )
 #+end_src

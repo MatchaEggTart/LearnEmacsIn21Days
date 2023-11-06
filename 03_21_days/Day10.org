@@ -2,17 +2,17 @@
 
 [[https://www.cnblogs.com/Open_Source/archive/2011/07/17/2108747.html][参考]]
 
-** 配置
 
-*** org-version
+** org-version
 
-**** WHAT
+*** WHAT
 
-指令，查看 org-mode 版本
+指令 org-version，查看 org-mode 版本
 
-*** 安装 org
 
-**** HOW
+** 安装 org
+
+*** HOW
 
 如果是 9.5.5 版本就没必要，不然要先删除再安装
 
@@ -37,27 +37,29 @@
     :pin melpa
     :ensure t)
 
-  ;; 非官方工具
+  ;; 非官方工具，引入 checklist
   (use-package org-contrib
     :pin nongnu
     )
 #+end_src
 
-*** 安装 org-todo
 
-**** HOW
-SCHEDULED: <2023-01-28 Sat 20:00>
+** 安装 org-todo
+
+*** HOW
 
 #+begin_src emacs-lisp
+  ;; TODO
   ;; 按 C-c C-t 可以直接选 TODO 状态
   (setq org-todo-keywords
-	(quote ((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!/!)")
-		(sequence "WAITING(w@/!)" "SOMEDAY(S)" "|" "CANCELLED(c@/!)" "MEETING(m)" "PHONE(p)"))))
+        (quote ((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!/!)")
+                (sequence "WAITING(w@/!)" "SOMEDAY(S)" "|" "CANCELLED(c@/!)" "MEETING(m)" "PHONE(p)"))))
 #+end_src
 
 因为这个选项可能导致 modeline高度不够，可以设置mode-line
 
 #+begin_src emacs-lisp
+  ;; 其实没必要，感觉新版没影响
   (use-package doom-modeline
   :init
   (doom-modeline-mode t)
@@ -72,17 +74,29 @@ SCHEDULED: <2023-01-28 Sat 20:00>
   )
 #+end_src
 
-*** org-checklist
 
-**** WHAT
+** org-checklist
+*** WHAT
 
 将信息组织起来，可以重复每天设置TODO状态
 使用 - [ ]， 可以做填充，按 C-c C-c 就会填充
 
-**** HOW
+*** HOW
 
 #+begin_src emacs-lisp
-  ;; M-x org-set-property 添加一个 RESET_CHECK_BOXES
+  ;; 先使用 * 创建标题，后面接上 [%] =>
+  ;; * 项目名 [%]
+  ;; M-x org-set-property 添加一个 RESET_CHECK_BOXES，选 t
+  ;; 例子 
+  ;; * 项目名 [50%]
+  ;; :PROPERTIES:
+  ;; :RESET_CHECK_BOXES: T
+  ;; :END:
+  ;; - [ ] a1
+  ;;   - [ ] b1
+  ;; - [X] a2
+  ;;   - [X] b2
+
   ;; RESET_CHECK_BOXES 值设为 t
   (require 'org-checklist)
   ;; need repeat task and properties
@@ -90,33 +104,29 @@ SCHEDULED: <2023-01-28 Sat 20:00>
   (setq org-log-into-drawer t)
 #+end_src
 
+
+*** EXAMPLE
+
+**** 项目名 [50%]
 :PROPERTIES:
-:RESET_CHECK_BOXES: true
+:RESET_CHECK_BOXES: T
 :END:
+- [ ] a1
+  - [ ] b1
+- [X] a2
+  - [X] b2
 
-**** EXAMPLE
 
-#+begin_src org-mode
-  * 项目名 [%]
-  :PROPERTIES:
-  :RESET_CHECK_BOXES: t
-  :END:
-  - 状态
-    - [ ] 需要完成A
-    - [ ] 需要完成B
-    - [ ] 需要完成C    
-#+end_src
+** org-agenda
 
-*** org-agenda
-
-**** WHAT
+*** WHAT
 
 日历增强，可以查看这周需要完成的事务
 按 C-c C-s 可以给 title 导入时间
 在 日期最后添加 +1d 可以作为每天都要进行的活动
 SCHEDULED: <2023-01-28 Sat 20:00 +1d>
 
-**** HOW
+*** HOW
 
 #+begin_src emacs-lisp
   ;; org 日历
@@ -124,17 +134,47 @@ SCHEDULED: <2023-01-28 Sat 20:00 +1d>
   ;; C-c C-d deadline
   ;; C-c a 查看日历需要完成的事务
   (global-set-key (kbd "C-c a") 'org-agenda)
-  (setq org-agenda-files '("~/.config/emacs/gtd.org"))
+  ;; touch ~/Workspace/gtd.org
+  ;; 需要在 ~/Workspace/gtd.org 里面写计划
+  (setq org-agenda-files '("~/Workspace/gtd.org"))
+  ;; 在 agenda 按 w 变成一周 按 d 变成 day
   (setq org-agenda-span 'day)
 #+end_src
 
-*** org-capture
+*** EXAMPLE
+**** DONE Daily routine [0%]
+SCHEDULED: <2023-11-08 Wed 15:00>
+:PROPERTIES:
+:RESET_CHECK_BOXES: t
+:LAST_REPEAT: [2023-11-20 Mon 15:26]
+:END:
+:LOGBOOK:
+:LOGBOOK:
+- State "DONE"       from "DONE"       [2023-11-06 Mon 15:35]
+- State "DONE"       from "DONE"       [2023-11-06 Mon 15:35]
+- State "DONE"       from "DONE"       [2023-11-06 Mon 15:32]
+- State "DONE"       from "TODO"       [2023-11-06 Mon 15:32]
+:END:
 
-**** WHAT
+- State "DONE"       from "TODO"       [2023-11-06 Mon 15:26]
+- State "DONE"       from "TODO"       [2023-11-06 Mon 15:26]
+- State "DONE"       from "TODO"       [2023-11-06 Mon 15:26]
+- State "DONE"       from "TODO"       [2023-11-06 Mon 15:22]
+- State "DONE"       from "TODO"       [2023-11-06 Mon 15:22]
+:END:
+- [ ] 吃饭
+  - [ ] 中午
+  - [ ] 晚上  
+- [ ] 睡觉  
+
+
+** org-capture
+
+*** WHAT
 
 定义模板
 
-**** HOW
+*** HOW
 
 #+begin_src emacs-lisp
   ;; 定义模板，生成模板
@@ -145,26 +185,29 @@ SCHEDULED: <2023-01-28 Sat 20:00 +1d>
   (global-set-key (kbd "C-c r") 'org-capture)
 #+end_src
 
-*** org-effect
 
-**** WHAT
+** org-effect
+
+*** WHAT
 
 可以定义每个 TODO 需要使用的时间，在 agenda 里面按 e
 按/ 进入过滤模式，然后按 _数字<多少分钟， 就能按时长过滤
 
-*** org-tags
 
-**** WHAT
+** org-tags
+
+*** WHAT
 
 在 agenda 里面， 按 : 添加 tag
 
-*** org-priority
 
-**** WHAT
+** org-priority
+
+*** WHAT
 
 在 agenda 里面 定义优先级， A > B > ...
 
-**** HOW
+*** HOW
 
 #+begin_src emacs-lisp
   (setq org-agenda-custom-commands
@@ -174,3 +217,7 @@ SCHEDULED: <2023-01-28 Sat 20:00 +1d>
 	))
 #+end_src
 
+
+** 参考
+
+[[https://www.cnblogs.com/Open_Source/archive/2011/07/17/2108747.html][Org-mode 简明手册]]

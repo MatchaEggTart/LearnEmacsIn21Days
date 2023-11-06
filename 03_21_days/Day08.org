@@ -1,30 +1,29 @@
 * 第八天
 
 
-** 配置
+** 文件即时刷新同步
 
-*** 文件即时刷新同步
-
-**** HOW
+*** HOW
 
 #+begin_src emacs-lisp
+  ;; init-system.el
   ;; 文件即时同步刷新
   (global-auto-revert-mode 1) ; 其实默认开启了
 #+end_src
 
 
-*** 关闭自动保存文件
+** 关闭自动保存文件
 
-**** HOW
+*** HOW
 
 #+begin_src emacs-lisp
   (setq auto-save-default nil)
 #+end_src
 
 
-*** 关闭提示音
+** 关闭提示音
 
-**** HOW
+*** HOW
 
 #+begin_src emacs-lisp
   ;; 关闭提示音
@@ -32,9 +31,9 @@
 #+end_src
 
 
-*** y 和 n 取代 yes 和 no
+** y 和 n 取代 yes 和 no
 
-**** HOW
+*** HOW
 
 #+begin_src emacs-lisp
   ;; y 和 n 取代 yes 和 no
@@ -48,7 +47,7 @@
 *** WHAT
 
 定义宏跟定义函数差不多，只是关键字不一样
-函数并不影响外部参数的值，而宏会
+函数并不影响外部参数的值，而宏会，可以理解为宏是双向绑定
 
 *** EXAMPLE
 
@@ -63,7 +62,8 @@
   ;; 调用宏
   (inc my-var)
 
-  macroexpand '(inc my-var) ; 打印表达式的值
+  ;; 打印表达式的值
+  (macroexpand '(inc my-var))
 
   ;; 定义函数
   (defun inc-2 (var)
@@ -83,18 +83,18 @@
 *** EXAMPLE
 
 #+begin_src emacs-lisp
-  ;; 定义 backquote
+  ;; 定义 backquote，遇到逗号(,)，它会动态求值
   `(a list of ,(+ 2 3) elements)
 
-  ;; 定义 quote
+  ;; 定义 quote，只会打印出它的表达式
   '(a list of (+ 2 3) elements)
 
+  ;; 定义 list [2,3]
   (setq some-list '(2 3))
 
+  ;; 拼接字符串
   `(1 ,@some-list 4 ,@some-list)
 #+end_src
-
-
 
 
 ** Use-package
@@ -124,7 +124,7 @@
        (require 'package-name nil 't))
       (ignore
        (message
-	(format "Cannot load %s" 'package-name))))
+        (format "Cannot load %s" 'package-name))))
 #+end_src
 
 **** 将配置集中
@@ -169,6 +169,8 @@ defer 也可以让 package-name 进行延迟加载
 
 *** HOW
 
+**** 旧
+
 #+begin_src emacs-lisp
   (use-package company
     :bind (:map company-active-map
@@ -181,3 +183,20 @@ defer 也可以让 package-name 进行延迟加载
     (setq company-idle-delay 0))
 #+end_src
 
+**** 新
+
+#+begin_src emacs-lisp
+  ;; 自动补全(新)
+  (use-package company
+    :hook (after-init . global-company-mode)
+    :config
+    (setq
+     company-minimum-prefix-length 1
+     ;; 补全时间等待
+     company-idle-delay 0
+     company-show-quick-access t)
+    :bind (:map company-active-map
+                ("C-n" . 'company-select-next)
+                ("C-p" . 'company-select-previous)))
+
+#+end_src

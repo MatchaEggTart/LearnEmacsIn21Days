@@ -73,12 +73,15 @@ sudo dnf install ripgrep
   (package-install 'wgrep)
   (setq wgrep-auto-save-buffer t)
 
+  ;; 先加载 consult包，再执行下面语句
+  ;; 可以做到延迟加载
   (eval-after-load 'consult
     '(eval-after-load 'embark
        '(progn
 	  (require 'embark-consult)
 	  (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode))))
 
+  ;; doom emacs 设置修改
   (defun embark-export-write ()
     "Export the current vertico results to a writable buffer if possible.
   Supports exporting consult-grep to wgrep, file to wdeired, and consult-location to occur-edit"
@@ -118,7 +121,11 @@ sudo dnf install ripgrep
 
 **** 如何批量替换
 
-先使用 M-x consult-ripgrep，输入字符串，然后 C-c C-e， 然后 M-%，进行递归替换
+先使用 M-x consult-ripgrep，输入字符串
+然后 C-c C-e
+然后 M-x，选择 query-replace-regrep(C-M-%)， 进行递归替换
+最后 C-c C-c 保存
+
 
 **** WINDOWS
 
@@ -155,4 +162,65 @@ WINDOWS 需要安装 Everything
     (add-hook 'minibuffer-exit-hook 'disable-py-search)
 
     (global-set-key (kbd "C-c p") 'toggle-chinese-search)
+#+END_SRC
+
+
+** 高亮当前行号
+
+*** HOW
+
+#+BEGIN_SRC emacs-lisp
+  ;; 高亮当前行号
+  (global-hl-line-mode 1)
+#+END_SRC
+
+
+** 安装主题
+
+*** HOW
+
+#+BEGIN_SRC emacs-lisp
+  ;; 主题
+
+  ;; 使用内置的 modus
+  ;;; For the built-in themes which cannot use `require'.
+  (use-package emacs
+    :config
+    (require-theme 'modus-themes) ; `require-theme' is ONLY for the built-in Modus themes
+
+    ;; Add all your customizations prior to loading the themes
+    (setq modus-themes-italic-constructs t
+	  modus-themes-bold-constructs nil)
+
+    ;; Maybe define some palette overrides, such as by using our presets
+    (setq modus-themes-common-palette-overrides
+	  modus-themes-preset-overrides-intense)
+
+    ;; Load the theme of your choice.
+    (load-theme 'modus-operandi-tinted)
+
+    (define-key global-map (kbd "<f5>") #'modus-themes-toggle)
+    )
+
+  ;; 使用下载的 modus
+  ;;; For packaged versions which must use `require'.
+  (use-package modus-themes
+    :ensure t
+    :init
+    (require-theme 'modus-themes)
+    :config
+    ;; Add all your customizations prior to loading the themes
+    (setq modus-themes-italic-constructs t
+	  modus-themes-bold-constructs nil)
+
+    ;; Maybe define some palette overrides, such as by using our presets
+    (setq modus-themes-common-palette-overrides
+	  modus-themes-preset-overrides-intense)
+
+    ;; Load the theme of your choice.
+    (load-theme 'modus-operandi-tinted)
+
+    (define-key global-map (kbd "<f5>") #'modus-themes-toggle)
+    )
+
 #+END_SRC

@@ -150,6 +150,7 @@ Emacs 提示 输入快捷键的插件
     ;; (setq vertico-cycle t)
     )
 
+  ;; 保存搜索历史
   ;; Persist history over Emacs restarts. Vertico sorts by history position.
   (use-package savehist
     :init
@@ -223,7 +224,7 @@ Emacs 提示 输入快捷键的插件
 **** use-package 管理
 
 #+BEGIN_SRC emacs-lisp
-  ;; 在 函数 使用 C-. 可以看到函数的详细信息
+  ;; 在 函数 使用 embark-act (C-.) 可以看到函数的详细信息
   (use-package embark
     :ensure t
 
@@ -286,7 +287,7 @@ swiper 替代者
     :bind
     ("C-s" . consult-line)
     ;; ("C-x b" . consult-buffer)
-    ("C-c p s" . consult-ripgrep)
+    ("M-s r" . consult-ripgrep)
     )
 
   ;; 官方例子
