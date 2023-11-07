@@ -1,0 +1,24 @@
+* 第十二天 Eglot
+
+
+** global-line-mode 失效
+
+*** WHAT
+
+emacs 29 不再使用 global-line-mode，而使用 global-display-line-numbers-mode
+性能更好
+
+*** HOW
+
+#+begin_src emacs-lisp
+  ;; 显示行号
+  (add-hook 'prog-mode-hook #'display-line-numbers-mode t)
+  (add-hook 'text-mode-hook #'display-line-numbers-mode t)
+  ;; 设置默认行号的长度
+  ;; (setq-default display-line-numbers-width-start 4)
+  (setq-default display-line-numbers-width 4)
+#+end_src
+
+
+** Eglot
+

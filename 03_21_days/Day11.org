@@ -1,0 +1,15 @@
+* 第十一天
+
+** Hugo
+
+*** WHAT
+
+[[https://gohugo.io/][Hugo]]
+
+** 安装 Hugo
+
+*** HOW
+
+#+begin_src emacs-lisp
+  sudo pacman -S hugo
+#+end_src
