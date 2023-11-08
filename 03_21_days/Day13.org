@@ -1,0 +1,46 @@
+* 第十四天 插件
+
+
+** iedit
+
+*** WHAT
+
+可以在一个 Buffer 下找到同样名称的 字符串，然后进行修改
+可以被 multiple-cursor 取代
+
+*** HOW
+
+#+begin_src emacs-lisp
+  ;; iedit - edit same text in one buffer or region
+  (use-package iedit
+    :ensure t                   
+    :bind ("C-;" . iedit-mode)
+    )
+#+end_src
+
+
+** muliple-cursors
+
+*** WHAT
+
+编辑杀器
+一定要关掉 Fcitx5 的 Configure addons => clipboard => C+; 的快捷键
+
+*** HOW
+
+#+begin_src emacs-lisp
+  ;; 块选择器
+  (use-package multiple-cursors
+    :bind
+    ("C-S-c C-S-c" . 'mc/edit-lines)
+    ("C->"         . 'mc/mark-next-like-this)
+    ("C-<"         . 'mc/mark-previous-like-this)
+    ("C-M->"       . 'mc/skip-to-next-like-this)
+    ("C-M-<"       . 'mc/skip-to-previous-like-this)
+    ("C-c C-<"     . 'mc/mark-all-like-this)
+    ("M-<mouse-1>" . 'mc/add-cursor-on-click)
+    ;; 要关闭 Fcitx5 的 C-; clipboard 快捷键
+    ("C-;"         . 'mc/mark-all-symbols-like-this)
+    ("C-:"         . 'mc/mark-all-symbols-like-this-in-defun)
+    )
+#+end_sr

@@ -1,0 +1,176 @@
+* 第十四天 treesitter eglot
+
+
+** 写代码的西瓜
+
+[[https://emacstalk.codeberg.page/podcast/][Emacs Talk]]
+
+
+** Treesitter
+
+*** WHAT
+
+语言解析器
+正则表达式实现高亮
+
+*** HOW
+
+#+begin_src emacs-lisp
+  ;;; init-treesit.el --- the configurations for treesit
+  ;;; Commentary:
+  ;;; Code:
+
+  ;; -*- lexical-binding: t -*-
+
+  ;; (use-package tree-sitter
+  ;;   :config
+  ;;   ;; (global-tree-sitter-mode)
+  ;;   (tree-sitter-require 'c)
+  ;;   (tree-sitter-require 'typescript)
+  ;;   
+  ;;   )
+  ;;  
+  ;; (use-package tree-sitter-langs
+  ;;   )
+  (use-package treesit-auto
+    :demand t
+    :init
+    (setq treesit-language-source-alist
+          '(
+            (c          . ("https://gh-proxy.com/https://github.com/tree-sitter/tree-sitter-c"))
+            (cpp        . ("https://gh-proxy.com/https://github.com/tree-sitter/tree-sitter-cpp"))
+            (bash       . ("https://gh-proxy.com/https://github.com/tree-sitter/tree-sitter-bash"))
+            (elisp      . ("https://gh-proxy.com/https://github.com/Wilfred/tree-sitter-elisp"))
+            (html       . ("https://gh-proxy.com/https://github.com/tree-sitter/tree-sitter-html"))
+            (css        . ("https://gh-proxy.com/https://github.com/tree-sitter/tree-sitter-css"))
+            (javascript . ("https://gh-proxy.com/https://github.com/tree-sitter/tree-sitter-javascript"))
+            (typescript . ("https://gh-proxy.com/https://github.com/tree-sitter/tree-sitter-typescript" nil "typescript/src"))
+            (tsx        . ("https://gh-proxy.com/https://github.com/tree-sitter/tree-sitter-typescript" nil "tsx/src"))
+            (json       . ("https://gh-proxy.com/https://github.com/tree-sitter/tree-sitter-json"))
+            (org        . ("https://gh-proxy.com/https://github.com/milisims/tree-sitter-org"))
+            (yaml       . ("https://gh-proxy.com/https://github.com/ikatyang/tree-sitter-yaml"))
+
+            ))
+    :mode
+    ("\\.ts\\'" . typescript-ts-mode)
+    :config
+    (setq treesit-auto-install 'prompt)
+    (global-treesit-auto-mode)
+    (add-to-list 'treesit-extra-load-path "~/.config/emacs/tree-sitter/tree-sitter-module")
+    ;; (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-ts-mode))
+    ;; 更多高亮
+    (setq treesit-font-lock-level 4)
+    )
+
+
+  (provide 'init-treesit)
+
+  ;;; init-treesit.el ends here
+#+end_src
+
+M-x treesit-install-language-grammar，安装语言的解析器数据库
+
+*** ATTENTION
+
+treesitter 会将 major mode 改变，比如 c-mode => c-ts-mode
+所以要想 eglot 自动运行，需要给 eglot 添加 hook
+
+#+begin_src emacs-lisp
+  (use-package eglot
+    ;; :hook (prog-mode . eglot-ensure)
+    :hook ((
+            elisp-mode
+            c-mode
+            c-ts-mode
+            c++-mode
+            c++-ts-mode
+            js-mode
+            js-ts-mode
+            typescript-ts-mode
+            ) . eglot-ensure)
+#+end_src
+
+
+** Eldoc
+
+*** WHAT
+
+是不是被下方的提示搞到爆炸，关闭就是 eldoc-mode
+想直接查看，可以输入 eldoc-mode 或者 eldoc
+
+
+** Consult
+
+*** HOW
+
+**** 在 Buffer 上跳转函数
+
+#+begin_src emacs-lisp
+  (use-package consult
+    :bind
+    ;; 在 Buffer 下跳转函数
+    ("M-g i" . consult-imenu)
+    ("M-g I" . consult-imenu-multi)
+    )
+#+end_src
+
+**** 跳行
+
+#+begin_src emacs-lisp
+  ;; 跳行
+  ("M-g g" . consult-goto-line)             ;; orig. goto-line
+  ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
+#+end_src
+
+
+** 查找定义和引用
+*** WHAT
+
+就是查看函数调用，跟函数定义
+
+*** HOW
+
+默认
+xref-find-references  (M-?)
+xref-find-definitions (M-.)
+
+
+** snippets
+*** WHAT
+
+company 触发后，会有占位符
+这样你输入 scanf 就可以输入完第一个参数，然后 tab 去第二个参数
+
+*** HOW
+
+#+begin_src emacs-lisp
+  (use-package yasnippet
+    :ensure t
+    :hook ((prog-mode . yas-minor-mode)
+           (org-mode . yas-minor-mode))
+    :init
+    :config
+    (progn
+      (setq hippie-expand-try-functions-list
+            '(yas/hippie-try-expand
+              try-complete-file-name-partially
+              try-expand-all-abbrevs
+              try-expand-dabbrev
+              try-expand-dabbrev-all-buffers
+              try-expand-dabbrev-from-kill
+              try-complete-lisp-symbol-partially
+              try-complete-lisp-symbol))))
+
+  (use-package yasnippet-snippets
+    :ensure t
+    :after yasnippet)
+#+end_src
+
+
+** 在头文件和源文件之间进行跳转
+
+*** HOW
+
+M-x ff-find-related-file
+
+

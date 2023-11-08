@@ -22,3 +22,231 @@ emacs 29 不再使用 global-line-mode，而使用 global-display-line-numbers-m
 
 ** Eglot
 
+*** WHAT
+
+emacs 29 自带的 Language Server Protocol(语言服务协议) 插件，为了替代 以前臃肿的 LSP
+
+*** HOW
+
+#+begin_src emacs-lisp
+  ;;; init-eglot.el --- the configurations for completion
+  ;;; Commentary:
+  ;;; Code:
+
+  ;; -*- lexical-binding: t -*-
+
+  (use-package eglot
+    ;; :hook (prog-mode . eglot-ensure)
+    :hook ((
+            elisp-mode
+            c-mode-hook
+            c++-mode-hook
+            js-mode
+            typescript-ts-mode
+            ) . eglot-ensure)
+    :bind ("C-c e f" . eglot-format)
+    :config
+    ;; (advice-add 'eglot-code-action-organize-imports :before #'eglot-format)
+    ;; https://wiki.archlinux.org/title/Language_Server_Protocol
+
+    ;; sudo pacman -S clang
+    (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+
+    ;; sudo npm install -g typescrip typescript-language-server
+    (add-to-list 'eglot-server-programs '(js-mode "typescript-language-server" "--stdio"))
+    (add-to-list 'eglot-server-programs '(typescript-ts-mode "typescript-language-server" "--stdio"))
+
+    
+    )
+
+  (provide 'init-eglot)
+  ;;; init-eglot.el ends here
+
+#+end_src
+
+
+** 安装 C/C++ 语言环境
+
+*** HOW
+
+#+begin_src shell
+  sudo pacman -S gcc gdb clang cmake
+#+end_src
+
+
+** 安装 Vterm
+
+*** HOW
+#+begin_src emacs-lisp
+  ;;; init-shell.el --- the configurations for shell
+  ;;; Commentary:
+  ;;; Code:
+
+  ;; -*- lexical-binding: t -*-
+
+  ;; Settings for exec-path-from-shell
+  ;; fix the PATH environment variable issue
+  (use-package exec-path-from-shell
+    :defer nil
+    :when (or (memq window-system '(mac ns x))
+              (unless (memq system-type '(windows-nt dos))
+                (daemonp)))
+    :init (exec-path-from-shell-initialize))
+
+
+  (use-package vterm
+    :pin melpa
+    ;; 教程 https://www.5axxw.com/wiki/content/aqagqc
+    :bind
+    ("C-c t" . vterm)
+    ;; vterm-copy-mode，默认使用 C-c C-t
+    )
+  ;; :ensure t
+  ;; :confit (display-line-numbers-mode nil))
+  ;;  )
+
+  ;; .zshrc or .bashrc
+  ;; vterm_printf() {
+  ;;     if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ]); then
+  ;;         # Tell tmux to pass the escape sequences through
+  ;;         printf "\ePtmux;\e\e]%s\007\e\\" "$1"
+  ;;     elif [ "${TERM%%-*}" = "screen" ]; then
+  ;;         # GNU screen (screen, screen-256color, screen-256color-bce)
+  ;;         printf "\eP\e]%s\007\e\\" "$1"
+  ;;     else
+  ;;         printf "\e]%s\e\\" "$1"
+  ;;     fi
+  ;; }
+
+  (provide 'init-shell)
+
+  ;;; init-shell.el ends here
+
+#+end_src
+
+
+** 使用 gbd 调试
+
+*** HOW
+
+1. M-x 输入 compile, 输入 g++ -g -o test.o test.cpp
+2. 使用 M-x gud-gdb 输入 gdb ./test.o
+3. 常用调试命令
+         
+| Name            | Function                                            |
+|-----------------+-----------------------------------------------------|
+| list            | 显示源代码                                            |
+| break           | 新增断点， break main, break 12（行号）                |
+| info            | 查看断点或者局部变量信息 info breakpoints, info locals |
+| run             | 开始调试                                             |
+| next            | 类似 step over                                       |
+| step            | 跳转到函数内部                                        |
+| continue        | 继续运行到下一个断点                                   |
+| quit            | 退出调试                                             |
+| watch           | 内存断点                                             |
+| display         | 类似 IDE 里面的 watch 功能                            |
+| break 11 if xxx | 条件断点                                             |
+
+	gcc -g a.c -o a
+        gbd ./a
+	
+*** EXAMPLE
+
+#+begin_src makefile
+  (gdb) list
+  1	#include<stdio.h>
+  2	int main(void) 
+  3	{ 
+  4	  int a,b,c; 
+  5	 
+  6	  printf("请输入三个数字：");
+  7	  scanf("%d%d%d",&a,&b,&c); 
+  8	  printf("%d,%d,%d\n",a,b,c);
+  9	  return 0; 
+  10	}
+  (gdb) 
+  Line number 11 out of range; a.c has 10 lines.
+  (gdb) break 7
+  Breakpoint 1 at 0x1184: file a.c, line 7.
+  (gdb) break 8
+  Breakpoint 2 at 0x11a7: file a.c, line 8.
+  (gdb) info breakpoints
+  Num     Type           Disp Enb Address            What
+  1       breakpoint     keep y   0x0000000000001184 in main at a.c:7
+  2       breakpoint     keep y   0x00000000000011a7 in main at a.c:8
+  (gdb) run
+  Starting program: ~/Workspace/Test/a 
+
+  This GDB supports auto-downloading debuginfo from the following URLs:
+    <https://debuginfod.archlinux.org>
+  Enable debuginfod for this session? (y or [n]) y
+  Debuginfod has been enabled.
+  To make this setting permanent, add 'set debuginfod enabled on' to .gdbinit.
+  Downloading separate debug info for /lib64/ld-linux-x86-64.so.2
+  Downloading separate debug info for system-supplied DSO at 0x7ffff7fc8000
+  Downloading separate debug info for /usr/lib/libc.so.6
+  Download failed: Timer expired.  Continuing without separate debug info for /usr/lib/libc.so.6.
+  [Thread debugging using libthread_db enabled]
+  Using host libthread_db library "/usr/lib/libthread_db.so.1".
+
+  Breakpoint 1, main () at a.c:7
+  7	  scanf("%d%d%d",&a,&b,&c); 
+  (gdb) run
+  The program being debugged has been started already.
+  Start it from the beginning? (y or n) y
+  Starting program: ~/Workspace/Test/a 
+  Downloading separate debug info for system-supplied DSO at 0x7ffff7fc8000
+  Downloading separate debug info for /usr/lib/libc.so.6
+  [Thread debugging using libthread_db enabled]
+  Using host libthread_db library "/usr/lib/libthread_db.so.1".
+
+  Breakpoint 1, main () at a.c:7
+  7	  scanf("%d%d%d",&a,&b,&c); 
+  (gdb) print a
+  $1 = 32767
+  (gdb) next
+  请输入三个数字：1 2 3
+
+  Breakpoint 2, main () at a.c:8
+  8	  printf("%d,%d,%d\n",a,b,c);
+  (gdb) print  a
+  $2 = 1
+  (gdb) print  b
+  $3 = 2
+  (gdb) print a
+  $4 = 1
+  (gdb) print c
+  $5 = 3
+  (gdb) continue	
+  Continuing.
+  1,2,3
+  [Inferior 1 (process 12908) exited normally]
+#+end_src
+
+
+** quickrun
+
+*** HOW
+
+#+begin_src emacs-lisp
+  ;; 快速运行代码
+  (use-package quickrun
+    :ensure t
+    :commands (quickrun)
+    :init
+    (quickrun-add-command "c++/c1z"
+      '((:command . "g++")
+        (:exec . ("%c -std=c++1z %o -o %e %s"
+                  "%e %a"))
+        (:remove . ("%e")))
+      :default "c++")
+    ;; You can override existing command
+    (quickrun-add-command "c/gcc"
+      '((:exec . ("%c -std=c++1z %o -o %e %s"
+                  "%e %a")))
+      :override t)
+    :config
+    (global-set-key (kbd "<f5>") 'quickrun)
+    )
+#+end_src
+
