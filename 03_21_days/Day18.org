@@ -58,7 +58,7 @@ M-x org-toggle-inline-images，可以把图片变成 不预览情况
 #+end_src
 
 #+ATTR_HTML: :width 100px
-[[file:img/screenshot_2023-11-09_20-53-22.jpg]]
+[[file:./img/screenshot_2023-11-09_20-53-22.jpg]]
 
 
 ** org protocol
