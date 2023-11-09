@@ -1,5 +1,6 @@
 * 第十八天 Org 进阶
 
+
 ** org-download
 
 *** HOW
@@ -58,15 +59,15 @@ M-x org-toggle-inline-images，可以把图片变成 不预览情况
 #+end_src
 
 #+ATTR_HTML: :width 100px
-[[file:./img/screenshot_2023-11-09_20-53-22.jpg]]
+[[file:img/screenshot_2023-11-09_20-53-22.jpg]]
 
 
 ** org protocol
 
-
 *** WHAT
 
 [[https://book.emacs-china.org/#org83aeec5][org protocol]]
+
 
 ** Spell checking
 
@@ -74,5 +75,20 @@ M-x org-toggle-inline-images，可以把图片变成 不预览情况
 
 [[https://book.emacs-china.org/#org444ee00A][Spell checking]]
 
-** 
+
+** Fanyi Dictionary
+
+*** WHAT
+
+[[https://book.emacs-china.org/#orgbbd947a][Fanyi Dictionary]]
+
+
+** Org 标题操作
+*** HOW
+
+#+BEGIN_QUOTE
+C-RET  for creating new headlines
+M-RET  for creating new lists
+M-left/right/up/down
+#+END_QUOTE
 
