@@ -1,0 +1,23 @@
+* 第十六天 窗口管理
+
+
+** 快速切换窗口
+
+*** HOW
+
+#+begin_src emacs-lisp
+  ;; 快速切换窗格
+  (use-package ace-window
+    :bind (("M-o" . 'ace-window)))
+#+end_src
+
+
+** 调整窗格大小
+
+*** HOW
+
+M + 20  C-x {
+M + 20  C-x }
+M + 20  C-x ^
+M + -20 C-x ^
+
