@@ -18,7 +18,7 @@
     按键|功能
     ---|---
     C-v| 切换到下一屏
-    M-v| 切换到上一屏
+    M-v| 切换到上一屏doom emacs
     C-l| 光标依次重置到屏幕中央、上端、下端
     M-<| 光标回到文本最开头
     M- | 光标去到文本最末端
@@ -102,6 +102,16 @@
     ---|---
     C-w| 剪切
     M-w| 复制
+
+  * 大小写转换
+
+    按键|功能
+    ---|---
+    M-u| upcase-word，整个单词转为大写
+    M-l| downcase-word，整个单词转为小写
+    M-c| capitalize-word，当前词首字母大写
+    C-x C-l| downcase-region，选定区域全部改为小写
+    C-x C-u| upcase-region，选定区域全部改为大写
 
   * 粘贴/召回(yank)
 
